@@ -19,6 +19,8 @@ body {
   align-items: center;
   background: #020617;
   display: flex;
+  flex-direction: column;
+  gap: 18px;
   justify-content: center;
   min-height: 100vh;
   overflow: hidden;
@@ -89,6 +91,47 @@ body {
 
 .login-card .hint {
   color: #93c5fd;
+}
+
+.login-mct-signature {
+  align-items: center;
+  display: flex;
+  gap: 11px;
+  height: 34px;
+  justify-content: center;
+  max-width: 430px;
+  pointer-events: none;
+  position: relative;
+  width: 100%;
+  z-index: 2;
+}
+
+.login-mct-signature span {
+  animation: loginMctReveal 0.75s ease forwards;
+  color: #ef4444;
+  font-size: 23px;
+  font-weight: 900;
+  line-height: 1;
+  opacity: 0;
+  text-shadow: 0 0 14px rgba(239, 68, 68, 0.5);
+  transform: translateY(8px) scale(0.92);
+}
+
+.login-mct-signature span:nth-child(2) {
+  animation-delay: 0.18s;
+  color: #fbbf24;
+  text-shadow: 0 0 14px rgba(251, 191, 36, 0.5);
+}
+
+.login-mct-signature span:nth-child(3) {
+  animation-delay: 0.36s;
+}
+
+@keyframes loginMctReveal {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .sidebar {
