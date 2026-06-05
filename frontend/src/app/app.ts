@@ -3,6 +3,7 @@ import { DatePipe, NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { environment } from '../environments/environment';
 import { Equipos, Equipo, EstadoApi, EvidenciaMantenimiento, Mantenimiento, MantenimientoReporte, PaginationMeta, ResumenDashboard } from './services/equipos';
+import { AuthService, UsuarioSesion } from './services/auth';
 import { ConfirmModal } from './components/confirm-modal/confirm-modal';
 import { Dashboard } from './components/dashboard/dashboard';
 import { EquiposList } from './components/equipos-list/equipos-list';
@@ -33,7 +34,14 @@ export class App implements OnInit {
   reporteMantenimientos: MantenimientoReporte[] = [];
   mantenimientoSeleccionado: Mantenimiento | null = null;
   mensaje = '';
+  mensajeLogin = '';
   cargando = false;
+  cargandoLogin = false;
+  usuarioSesion: UsuarioSesion | null = null;
+  credenciales = {
+    usuario: '',
+    password: ''
+  };
   alertaMantenimiento = {
     estado: 'sin-fecha',
     titulo: 'Sin proxima fecha',
@@ -126,13 +134,56 @@ mostrarFormularioEquipo = false;
 mostrarFormularioMantenimiento = false;
 mostrarFormularioEdicionEquipo = false;
 
-  constructor(private equiposService: Equipos) {}
+  constructor(private equiposService: Equipos, private authService: AuthService) {}
 
   ngOnInit() {
     this.verificarApi();
+    this.usuarioSesion = this.authService.obtenerUsuario();
+
+    if (this.usuarioSesion) {
+      this.inicializarDatos();
+    }
+  }
+
+  inicializarDatos() {
     this.cargarResumen();
     this.listarEquipos();
     this.listarReporteMantenimientos();
+  }
+
+  iniciarSesion() {
+    if (!this.credenciales.usuario || !this.credenciales.password) {
+      this.mensajeLogin = 'Ingrese usuario y contrasena.';
+      return;
+    }
+
+    this.cargandoLogin = true;
+    this.mensajeLogin = '';
+
+    this.authService.login(this.credenciales.usuario, this.credenciales.password).subscribe({
+      next: (respuesta) => {
+        this.usuarioSesion = respuesta.usuario;
+        this.credenciales = { usuario: '', password: '' };
+        this.cargandoLogin = false;
+        this.mensaje = 'Sesion iniciada correctamente.';
+        this.inicializarDatos();
+      },
+      error: () => {
+        this.cargandoLogin = false;
+        this.mensajeLogin = 'Usuario o contrasena incorrectos.';
+      }
+    });
+  }
+
+  cerrarSesion() {
+    this.authService.cerrarSesion();
+    this.usuarioSesion = null;
+    this.equipo = null;
+    this.equipos = [];
+    this.mantenimientos = [];
+    this.reporteMantenimientos = [];
+    this.mantenimientoSeleccionado = null;
+    this.mensaje = '';
   }
 
   verificarApi() {

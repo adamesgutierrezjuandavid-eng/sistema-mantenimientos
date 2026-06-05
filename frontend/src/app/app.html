@@ -1,4 +1,32 @@
-<main class="app-shell">
+<main class="login-page" *ngIf="!usuarioSesion">
+  <section class="login-card">
+    <div class="brand-mark">SM</div>
+    <span class="eyebrow">Acceso seguro</span>
+    <h1>Sistema de Mantenimientos</h1>
+    <p>Ingrese con su usuario para gestionar equipos, mantenimientos y evidencias.</p>
+
+    <form class="login-form" (ngSubmit)="iniciarSesion()">
+      <div>
+        <label>Usuario</label>
+        <input type="text" name="login_usuario" [(ngModel)]="credenciales.usuario" autocomplete="username" />
+      </div>
+
+      <div>
+        <label>Contrasena</label>
+        <input type="password" name="login_password" [(ngModel)]="credenciales.password" autocomplete="current-password" />
+      </div>
+
+      <button type="submit" [disabled]="cargandoLogin">
+        {{ cargandoLogin ? 'Ingresando...' : 'Ingresar' }}
+      </button>
+    </form>
+
+    <p class="message error" *ngIf="mensajeLogin">{{ mensajeLogin }}</p>
+    <p class="hint">Usuario inicial: admin / admin123</p>
+  </section>
+</main>
+
+<main class="app-shell" *ngIf="usuarioSesion">
   <aside class="sidebar">
     <div class="brand-block">
       <div class="brand-mark">SM</div>
@@ -52,6 +80,12 @@
       <div class="api-status" [class.offline]="!apiConectada">
         <span></span>
         {{ estadoApi }}
+      </div>
+
+      <div class="session-box">
+        <span>{{ usuarioSesion.nombre }}</span>
+        <strong>{{ usuarioSesion.rol }}</strong>
+        <button type="button" class="secondary" (click)="cerrarSesion()">Salir</button>
       </div>
     </header>
 

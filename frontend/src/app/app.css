@@ -15,6 +15,49 @@ body {
   min-height: 100vh;
 }
 
+.login-page {
+  align-items: center;
+  background: #111827;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px;
+}
+
+.login-card {
+  background: #ffffff;
+  border: 1px solid #d9e2ec;
+  border-radius: 8px;
+  box-shadow: 0 24px 80px rgba(15, 23, 42, 0.28);
+  max-width: 430px;
+  padding: 28px;
+  width: 100%;
+}
+
+.login-card h1 {
+  font-size: 28px;
+  margin: 10px 0 8px;
+}
+
+.login-card p {
+  color: #52606d;
+  line-height: 1.5;
+}
+
+.login-form {
+  display: grid;
+  gap: 14px;
+  margin-top: 22px;
+}
+
+.login-form label {
+  color: #334e68;
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
 .sidebar {
   background: #111827;
   color: #e5e7eb;
@@ -135,6 +178,28 @@ body {
   margin-bottom: 18px;
   padding: 22px 24px;
   box-shadow: 0 8px 24px rgba(16, 42, 67, 0.06);
+}
+
+.session-box {
+  align-items: center;
+  border-left: 1px solid #d9e2ec;
+  display: flex;
+  gap: 10px;
+  padding-left: 16px;
+}
+
+.session-box span {
+  color: #102a43;
+  font-weight: 800;
+}
+
+.session-box strong {
+  background: #dbeafe;
+  border-radius: 999px;
+  color: #1d4ed8;
+  font-size: 12px;
+  padding: 4px 9px;
+  text-transform: uppercase;
 }
 
 .app-header h1 {
@@ -428,6 +493,10 @@ button:disabled {
   margin-top: 12px;
 }
 
+.message.error {
+  color: #b91c1c;
+}
+
 .hint {
   color: #627d98;
   font-size: 13px;
@@ -650,6 +719,16 @@ tbody tr:hover {
   .app-header {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .session-box {
+    align-items: stretch;
+    border-left: 0;
+    border-top: 1px solid #d9e2ec;
+    flex-direction: column;
+    padding-left: 0;
+    padding-top: 14px;
+    width: 100%;
   }
 
   .grid,
