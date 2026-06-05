@@ -92,11 +92,11 @@ export class ParticlesMctBackground implements AfterViewInit, OnDestroy {
     this.frame = 0;
 
     const particles: Particle[] = letterTargets.map((target, index) => ({
-      x: target.x + this.random(-110, 110),
-      y: target.y + this.random(-95, 95),
+      x: target.x + this.random(-80, 80),
+      y: target.y + this.random(-70, 70),
       vx: this.random(-0.18, 0.18),
       vy: this.random(-0.18, 0.18),
-      radius: this.random(2.1, 3.4),
+      radius: this.random(1.4, 2.3),
       alpha: 0,
       delay: index * 2.2,
       color: index % 2 === 0 ? '248, 113, 113' : '251, 191, 36',
@@ -128,12 +128,12 @@ export class ParticlesMctBackground implements AfterViewInit, OnDestroy {
       ['.1111', '1....', '1....', '1....', '1....', '1....', '.1111'],
       ['11111', '..1..', '..1..', '..1..', '..1..', '..1..', '..1..']
     ];
-    const cell = Math.max(10, Math.min(this.width, this.height) * (this.width < 760 ? 0.022 : 0.026));
+    const cell = Math.min(12, Math.max(8, Math.min(this.width, this.height) * (this.width < 760 ? 0.018 : 0.016)));
     const gap = cell * 2.4;
     const letterWidth = 5 * cell;
     const totalWidth = letters.length * letterWidth + (letters.length - 1) * gap;
     const startX = this.width * 0.5 - totalWidth / 2;
-    const verticalPosition = this.width < 760 ? 0.77 : 0.72;
+    const verticalPosition = this.width < 760 ? 0.84 : 0.82;
     const startY = this.height * verticalPosition - (7 * cell) / 2;
     const targets: Array<{ x: number; y: number }> = [];
 
