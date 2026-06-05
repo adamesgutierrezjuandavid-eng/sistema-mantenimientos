@@ -6,13 +6,14 @@ import { Equipos, Equipo, EstadoApi, EvidenciaMantenimiento, Mantenimiento, Mant
 import { ConfirmModal } from './components/confirm-modal/confirm-modal';
 import { Dashboard } from './components/dashboard/dashboard';
 import { EquiposList } from './components/equipos-list/equipos-list';
+import { ReportesList } from './components/reportes-list/reportes-list';
 
 type AccionConfirmacion = 'eliminar-evidencia' | 'eliminar-mantenimiento' | 'eliminar-equipo';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [FormsModule, NgIf, NgFor, DatePipe, ConfirmModal, Dashboard, EquiposList],
+  imports: [FormsModule, NgIf, NgFor, DatePipe, ConfirmModal, Dashboard, EquiposList, ReportesList],
   templateUrl: './app.html',
   styleUrls: ['./app.css']
 })

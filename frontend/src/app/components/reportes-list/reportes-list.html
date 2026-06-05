@@ -1,0 +1,122 @@
+<section class="panel">
+  <div class="section-header">
+    <h2>Reporte de mantenimientos</h2>
+    <button
+      type="button"
+      class="secondary"
+      *ngIf="mantenimientos.length > 0"
+      (click)="exportar.emit()"
+    >
+      Exportar pagina
+    </button>
+  </div>
+
+  <form class="filters report-filters" (ngSubmit)="filtrar.emit()">
+    <div>
+      <label>Desde</label>
+      <input type="date" name="reporte_fecha_inicio" [(ngModel)]="filtros.fecha_inicio" />
+    </div>
+
+    <div>
+      <label>Hasta</label>
+      <input type="date" name="reporte_fecha_fin" [(ngModel)]="filtros.fecha_fin" />
+    </div>
+
+    <div>
+      <label>Tecnico</label>
+      <input type="text" name="reporte_tecnico" [(ngModel)]="filtros.tecnico" />
+    </div>
+
+    <div>
+      <label>Estado</label>
+      <select name="reporte_estado" [(ngModel)]="filtros.estado">
+        <option value="">Todos</option>
+        <option value="terminado">Terminado</option>
+        <option value="pendiente">Pendiente</option>
+        <option value="en proceso">En proceso</option>
+      </select>
+    </div>
+
+    <div>
+      <label>Tipo</label>
+      <select name="reporte_tipo" [(ngModel)]="filtros.tipo">
+        <option value="">Todos</option>
+        <option value="preventivo">Preventivo</option>
+        <option value="correctivo">Correctivo</option>
+        <option value="predictivo">Predictivo</option>
+      </select>
+    </div>
+
+    <div class="actions">
+      <button type="submit">Filtrar</button>
+      <button type="button" class="secondary" (click)="limpiar.emit()">Limpiar</button>
+    </div>
+  </form>
+
+  <div class="table-wrap">
+    <table *ngIf="mantenimientos.length > 0">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Equipo</th>
+          <th>Codigo</th>
+          <th>Tipo</th>
+          <th>Tecnico</th>
+          <th>Estado</th>
+          <th>Evidencias</th>
+          <th>Proxima fecha</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of mantenimientos">
+          <td>{{ item.fecha_mantenimiento | date:'yyyy-MM-dd' }}</td>
+          <td>{{ item.equipo }}</td>
+          <td>{{ item.codigo_barras }}</td>
+          <td>{{ item.tipo_mantenimiento }}</td>
+          <td>{{ item.tecnico }}</td>
+          <td>
+            <span
+              class="maintenance-status"
+              [class.pending]="item.estado === 'pendiente'"
+              [class.process]="item.estado === 'en proceso'"
+              [class.done]="item.estado === 'terminado'"
+            >
+              {{ item.estado }}
+            </span>
+          </td>
+          <td>{{ item.evidencias_count || 0 }}</td>
+          <td>{{ item.proxima_fecha | date:'yyyy-MM-dd' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="message" *ngIf="mantenimientos.length === 0">
+    No hay mantenimientos con esos filtros.
+  </p>
+
+  <div class="pagination" *ngIf="paginacion.total > 0">
+    <span>
+      Pagina {{ paginacion.page }} de {{ paginacion.totalPages }}
+      - {{ paginacion.total }} registro(s)
+    </span>
+    <div>
+      <button
+        type="button"
+        class="secondary"
+        [disabled]="paginacion.page <= 1"
+        (click)="cambiarPagina.emit(paginacion.page - 1)"
+      >
+        Anterior
+      </button>
+      <button
+        type="button"
+        class="secondary"
+        [disabled]="paginacion.page >= paginacion.totalPages"
+        (click)="cambiarPagina.emit(paginacion.page + 1)"
+      >
+        Siguiente
+      </button>
+    </div>
+  </div>
+</section>
