@@ -7,6 +7,7 @@ import { AuthService, UsuarioSesion } from './services/auth';
 import { ConfirmModal } from './components/confirm-modal/confirm-modal';
 import { Dashboard } from './components/dashboard/dashboard';
 import { EquiposList } from './components/equipos-list/equipos-list';
+import { ParticlesMctBackground } from './components/particles-mct-background/particles-mct-background';
 import { ReportesList } from './components/reportes-list/reportes-list';
 
 type AccionConfirmacion = 'eliminar-evidencia' | 'eliminar-mantenimiento' | 'eliminar-equipo';
@@ -14,7 +15,17 @@ type AccionConfirmacion = 'eliminar-evidencia' | 'eliminar-mantenimiento' | 'eli
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [FormsModule, NgIf, NgFor, DatePipe, ConfirmModal, Dashboard, EquiposList, ReportesList],
+  imports: [
+    FormsModule,
+    NgIf,
+    NgFor,
+    DatePipe,
+    ConfirmModal,
+    Dashboard,
+    EquiposList,
+    ParticlesMctBackground,
+    ReportesList
+  ],
   templateUrl: './app.html',
   styleUrls: ['./app.css']
 })

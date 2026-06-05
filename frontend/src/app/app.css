@@ -17,30 +17,36 @@ body {
 
 .login-page {
   align-items: center;
-  background: #111827;
+  background: #020617;
   display: flex;
   justify-content: center;
   min-height: 100vh;
+  overflow: hidden;
   padding: 24px;
+  position: relative;
 }
 
 .login-card {
-  background: #ffffff;
-  border: 1px solid #d9e2ec;
+  backdrop-filter: blur(18px);
+  background: rgba(15, 23, 42, 0.76);
+  border: 1px solid rgba(125, 211, 252, 0.22);
   border-radius: 8px;
-  box-shadow: 0 24px 80px rgba(15, 23, 42, 0.28);
+  box-shadow: 0 24px 80px rgba(2, 6, 23, 0.48);
   max-width: 430px;
   padding: 28px;
+  position: relative;
   width: 100%;
+  z-index: 2;
 }
 
 .login-card h1 {
+  color: #f8fafc;
   font-size: 28px;
   margin: 10px 0 8px;
 }
 
 .login-card p {
-  color: #52606d;
+  color: #cbd5e1;
   line-height: 1.5;
 }
 
@@ -51,11 +57,38 @@ body {
 }
 
 .login-form label {
-  color: #334e68;
+  color: #dbeafe;
   display: block;
   font-size: 14px;
   font-weight: 700;
   margin-bottom: 6px;
+}
+
+.login-form input {
+  background: rgba(248, 250, 252, 0.94);
+  border-color: rgba(191, 219, 254, 0.62);
+}
+
+.login-form button {
+  background: #38bdf8;
+  color: #082f49;
+}
+
+.login-form button:hover {
+  background: #7dd3fc;
+}
+
+.login-card .brand-mark {
+  box-shadow: 0 0 34px rgba(56, 189, 248, 0.34);
+}
+
+.login-card .eyebrow {
+  color: #7dd3fc;
+  margin-top: 16px;
+}
+
+.login-card .hint {
+  color: #93c5fd;
 }
 
 .sidebar {
