@@ -14,6 +14,9 @@ interface Particle {
   vx: number;
   vy: number;
   radius: number;
+  alpha: number;
+  delay: number;
+  color: string;
   targetX?: number;
   targetY?: number;
   isLetter: boolean;
@@ -34,10 +37,10 @@ export class ParticlesMctBackground implements AfterViewInit, OnDestroy {
   private animationFrameId = 0;
   private width = 0;
   private height = 0;
+  private frame = 0;
   private readonly floatingParticleCount = 70;
   private readonly connectionDistance = 115;
   private readonly lineOpacity = 0.16;
-  private readonly letterParticleColor = 'rgba(125, 211, 252, 0.88)';
   private readonly floatingParticleColor = 'rgba(226, 232, 240, 0.62)';
 
   private readonly onResize = () => this.resize();
@@ -86,12 +89,17 @@ export class ParticlesMctBackground implements AfterViewInit, OnDestroy {
 
   private createParticles() {
     const letterTargets = this.createMctTargets();
-    const particles: Particle[] = letterTargets.map((target) => ({
-      x: target.x + this.random(-80, 80),
-      y: target.y + this.random(-70, 70),
+    this.frame = 0;
+
+    const particles: Particle[] = letterTargets.map((target, index) => ({
+      x: target.x + this.random(-110, 110),
+      y: target.y + this.random(-95, 95),
       vx: this.random(-0.18, 0.18),
       vy: this.random(-0.18, 0.18),
-      radius: this.random(1.4, 2.6),
+      radius: this.random(2.1, 3.4),
+      alpha: 0,
+      delay: index * 2.2,
+      color: index % 2 === 0 ? '248, 113, 113' : '251, 191, 36',
       targetX: target.x,
       targetY: target.y,
       isLetter: true
@@ -104,6 +112,9 @@ export class ParticlesMctBackground implements AfterViewInit, OnDestroy {
         vx: this.random(-0.24, 0.24),
         vy: this.random(-0.24, 0.24),
         radius: this.random(1, 2.1),
+        alpha: 1,
+        delay: 0,
+        color: '226, 232, 240',
         isLetter: false
       });
     }
@@ -117,12 +128,13 @@ export class ParticlesMctBackground implements AfterViewInit, OnDestroy {
       ['.1111', '1....', '1....', '1....', '1....', '1....', '.1111'],
       ['11111', '..1..', '..1..', '..1..', '..1..', '..1..', '..1..']
     ];
-    const cell = Math.max(9, Math.min(this.width, this.height) * 0.018);
+    const cell = Math.max(10, Math.min(this.width, this.height) * (this.width < 760 ? 0.022 : 0.026));
     const gap = cell * 2.4;
     const letterWidth = 5 * cell;
     const totalWidth = letters.length * letterWidth + (letters.length - 1) * gap;
-    const startX = this.width * 0.52 - totalWidth / 2;
-    const startY = this.height * 0.48 - (7 * cell) / 2;
+    const startX = this.width * 0.5 - totalWidth / 2;
+    const verticalPosition = this.width < 760 ? 0.77 : 0.72;
+    const startY = this.height * verticalPosition - (7 * cell) / 2;
     const targets: Array<{ x: number; y: number }> = [];
 
     letters.forEach((rows, letterIndex) => {
@@ -170,12 +182,18 @@ export class ParticlesMctBackground implements AfterViewInit, OnDestroy {
   }
 
   private updateParticles() {
+    this.frame += 1;
+
     for (const particle of this.particles) {
       if (particle.isLetter && particle.targetX !== undefined && particle.targetY !== undefined) {
-        particle.vx += (particle.targetX - particle.x) * 0.0015;
-        particle.vy += (particle.targetY - particle.y) * 0.0015;
+        particle.vx += (particle.targetX - particle.x) * 0.0024;
+        particle.vy += (particle.targetY - particle.y) * 0.0024;
         particle.vx *= 0.94;
         particle.vy *= 0.94;
+
+        if (this.frame > particle.delay) {
+          particle.alpha = Math.min(1, particle.alpha + 0.018);
+        }
       }
 
       particle.x += particle.vx;
@@ -201,8 +219,14 @@ export class ParticlesMctBackground implements AfterViewInit, OnDestroy {
         const maxDistance = a.isLetter && b.isLetter ? this.connectionDistance * 0.72 : this.connectionDistance;
 
         if (distance < maxDistance) {
-          const opacity = (1 - distance / maxDistance) * this.lineOpacity;
-          this.ctx.strokeStyle = `rgba(125, 211, 252, ${opacity})`;
+          const revealOpacity =
+            a.isLetter && b.isLetter ? Math.min(a.alpha, b.alpha) : a.isLetter ? a.alpha : b.isLetter ? b.alpha : 1;
+          const opacity =
+            (1 - distance / maxDistance) *
+            (a.isLetter && b.isLetter ? 0.3 : this.lineOpacity) *
+            revealOpacity;
+          this.ctx.strokeStyle =
+            a.isLetter && b.isLetter ? `rgba(251, 191, 36, ${opacity})` : `rgba(125, 211, 252, ${opacity})`;
           this.ctx.lineWidth = a.isLetter && b.isLetter ? 0.9 : 0.55;
           this.ctx.beginPath();
           this.ctx.moveTo(a.x, a.y);
@@ -215,7 +239,9 @@ export class ParticlesMctBackground implements AfterViewInit, OnDestroy {
 
   private drawParticles() {
     for (const particle of this.particles) {
-      this.ctx.fillStyle = particle.isLetter ? this.letterParticleColor : this.floatingParticleColor;
+      this.ctx.fillStyle = particle.isLetter
+        ? `rgba(${particle.color}, ${particle.alpha * 0.94})`
+        : this.floatingParticleColor;
       this.ctx.beginPath();
       this.ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
       this.ctx.fill();
