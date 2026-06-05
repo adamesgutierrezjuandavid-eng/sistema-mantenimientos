@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+
+# Build outputs and caches
+dist/
+out-tsc/
+.angular/
+coverage/
+
+# Environment and secrets
+.env
+*.env
+
+# Uploaded files
+backend/uploads/evidencias/
+
+# Logs
+npm-debug.log*
+yarn-error.log*
+*.log
+
+# Editor and OS files
+.vscode/
+.idea/
+.history/
+.DS_Store
+Thumbs.db
+
+# Temporary embedded repo backup, if present
+frontend/.git-frontend-backup*/
