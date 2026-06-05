@@ -1,62 +1,83 @@
-<main class="page">
-  <header class="app-header">
-    <div>
-      <span class="eyebrow">Gestion tecnica</span>
-      <h1>Sistema de Mantenimientos</h1>
-      <p>Control de equipos por codigo de barras, historial y alertas operativas.</p>
+<main class="app-shell">
+  <aside class="sidebar">
+    <div class="brand-block">
+      <div class="brand-mark">SM</div>
+      <div>
+        <span>Gestion tecnica</span>
+        <strong>Mantenimientos</strong>
+      </div>
     </div>
 
-    <div class="api-status" [class.offline]="!apiConectada">
-      <span></span>
-      {{ estadoApi }}
-    </div>
-  </header>
+    <nav class="side-nav">
+      <button
+        type="button"
+        [class.active]="vistaActiva === 'operacion'"
+        (click)="vistaActiva = 'operacion'"
+      >
+        <span>OP</span>
+        Operacion
+      </button>
+      <button
+        type="button"
+        [class.active]="vistaActiva === 'reportes'"
+        (click)="vistaActiva = 'reportes'"
+      >
+        <span>RP</span>
+        Reportes
+      </button>
+      <button
+        type="button"
+        [class.active]="vistaActiva === 'equipos'"
+        (click)="vistaActiva = 'equipos'"
+      >
+        <span>EQ</span>
+        Equipos
+      </button>
+    </nav>
 
-  <section class="dashboard">
-    <div class="stat-card">
-      <span>Equipos</span>
-      <strong>{{ resumen.total_equipos }}</strong>
+    <div class="sidebar-footer">
+      <span>Base operativa</span>
+      <strong>Soporte interno</strong>
     </div>
+  </aside>
 
-    <div class="stat-card">
-      <span>Mantenimientos</span>
-      <strong>{{ resumen.total_mantenimientos }}</strong>
-    </div>
+  <section class="workspace">
+    <header class="app-header">
+      <div>
+        <span class="eyebrow">Sistema interno</span>
+        <h1>Sistema de Mantenimientos</h1>
+        <p>Control de equipos por codigo de barras, historial y alertas operativas.</p>
+      </div>
 
-    <div class="stat-card warning">
-      <span>Pendientes</span>
-      <strong>{{ resumen.mantenimientos_pendientes }}</strong>
-    </div>
+      <div class="api-status" [class.offline]="!apiConectada">
+        <span></span>
+        {{ estadoApi }}
+      </div>
+    </header>
 
-    <div class="stat-card danger">
-      <span>Proximos 7 dias</span>
-      <strong>{{ resumen.proximos_mantenimientos }}</strong>
-    </div>
-  </section>
+    <section class="dashboard">
+      <div class="stat-card">
+        <span>Equipos</span>
+        <strong>{{ resumen.total_equipos }}</strong>
+      </div>
 
-  <nav class="view-tabs">
-    <button
-      type="button"
-      [class.active]="vistaActiva === 'operacion'"
-      (click)="vistaActiva = 'operacion'"
-    >
-      Operacion
-    </button>
-    <button
-      type="button"
-      [class.active]="vistaActiva === 'reportes'"
-      (click)="vistaActiva = 'reportes'"
-    >
-      Reportes
-    </button>
-    <button
-      type="button"
-      [class.active]="vistaActiva === 'equipos'"
-      (click)="vistaActiva = 'equipos'"
-    >
-      Equipos
-    </button>
-  </nav>
+      <div class="stat-card">
+        <span>Mantenimientos</span>
+        <strong>{{ resumen.total_mantenimientos }}</strong>
+      </div>
+
+      <div class="stat-card warning">
+        <span>Pendientes</span>
+        <strong>{{ resumen.mantenimientos_pendientes }}</strong>
+      </div>
+
+      <div class="stat-card danger">
+        <span>Proximos 7 dias</span>
+        <strong>{{ resumen.proximos_mantenimientos }}</strong>
+      </div>
+    </section>
+
+    <section class="content-stack">
 
   <ng-container *ngIf="vistaActiva === 'operacion'">
   <section class="panel">
@@ -867,6 +888,7 @@
     </div>
   </section>
   </ng-container>
+    </section>
 
   <div class="modal-backdrop" *ngIf="confirmacion.visible">
     <section class="confirm-modal">
@@ -878,4 +900,5 @@
       </div>
     </section>
   </div>
+  </section>
 </main>
