@@ -1,0 +1,21 @@
+<section class="dashboard">
+  <div class="stat-card">
+    <span>Equipos</span>
+    <strong>{{ resumen.total_equipos }}</strong>
+  </div>
+
+  <div class="stat-card">
+    <span>Mantenimientos</span>
+    <strong>{{ resumen.total_mantenimientos }}</strong>
+  </div>
+
+  <div class="stat-card warning">
+    <span>Pendientes</span>
+    <strong>{{ resumen.mantenimientos_pendientes }}</strong>
+  </div>
+
+  <div class="stat-card danger">
+    <span>Proximos 7 dias</span>
+    <strong>{{ resumen.proximos_mantenimientos }}</strong>
+  </div>
+</section>

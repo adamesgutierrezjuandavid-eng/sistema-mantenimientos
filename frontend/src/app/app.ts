@@ -3,13 +3,15 @@ import { DatePipe, NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { environment } from '../environments/environment';
 import { Equipos, Equipo, EstadoApi, EvidenciaMantenimiento, Mantenimiento, MantenimientoReporte, PaginationMeta, ResumenDashboard } from './services/equipos';
+import { ConfirmModal } from './components/confirm-modal/confirm-modal';
+import { Dashboard } from './components/dashboard/dashboard';
 
 type AccionConfirmacion = 'eliminar-evidencia' | 'eliminar-mantenimiento' | 'eliminar-equipo';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [FormsModule, NgIf, NgFor, DatePipe],
+  imports: [FormsModule, NgIf, NgFor, DatePipe, ConfirmModal, Dashboard],
   templateUrl: './app.html',
   styleUrls: ['./app.css']
 })

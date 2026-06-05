@@ -55,27 +55,7 @@
       </div>
     </header>
 
-    <section class="dashboard">
-      <div class="stat-card">
-        <span>Equipos</span>
-        <strong>{{ resumen.total_equipos }}</strong>
-      </div>
-
-      <div class="stat-card">
-        <span>Mantenimientos</span>
-        <strong>{{ resumen.total_mantenimientos }}</strong>
-      </div>
-
-      <div class="stat-card warning">
-        <span>Pendientes</span>
-        <strong>{{ resumen.mantenimientos_pendientes }}</strong>
-      </div>
-
-      <div class="stat-card danger">
-        <span>Proximos 7 dias</span>
-        <strong>{{ resumen.proximos_mantenimientos }}</strong>
-      </div>
-    </section>
+    <app-dashboard [resumen]="resumen"></app-dashboard>
 
     <section class="content-stack">
 
@@ -890,15 +870,12 @@
   </ng-container>
     </section>
 
-  <div class="modal-backdrop" *ngIf="confirmacion.visible">
-    <section class="confirm-modal">
-      <h2>{{ confirmacion.titulo }}</h2>
-      <p>{{ confirmacion.mensaje }}</p>
-      <div class="actions">
-        <button type="button" class="secondary" (click)="cancelarConfirmacion()">Cancelar</button>
-        <button type="button" class="danger-button" (click)="ejecutarConfirmacion()">Confirmar</button>
-      </div>
-    </section>
-  </div>
+  <app-confirm-modal
+    *ngIf="confirmacion.visible"
+    [titulo]="confirmacion.titulo"
+    [mensaje]="confirmacion.mensaje"
+    (cancelar)="cancelarConfirmacion()"
+    (confirmar)="ejecutarConfirmacion()"
+  ></app-confirm-modal>
   </section>
 </main>

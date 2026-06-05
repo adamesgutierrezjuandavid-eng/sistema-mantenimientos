@@ -1,0 +1,10 @@
+<div class="modal-backdrop">
+  <section class="confirm-modal">
+    <h2>{{ titulo }}</h2>
+    <p>{{ mensaje }}</p>
+    <div class="actions">
+      <button type="button" class="secondary" (click)="cancelar.emit()">Cancelar</button>
+      <button type="button" class="danger-button" (click)="confirmar.emit()">Confirmar</button>
+    </div>
+  </section>
+</div>

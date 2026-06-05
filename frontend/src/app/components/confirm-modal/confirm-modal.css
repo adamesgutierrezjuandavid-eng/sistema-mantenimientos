@@ -1,0 +1,58 @@
+.modal-backdrop {
+  align-items: center;
+  background: rgba(15, 23, 42, 0.54);
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  padding: 20px;
+  position: fixed;
+  z-index: 50;
+}
+
+.confirm-modal {
+  background: #ffffff;
+  border: 1px solid #d9e2ec;
+  border-radius: 8px;
+  box-shadow: 0 24px 80px rgba(15, 23, 42, 0.28);
+  max-width: 440px;
+  padding: 24px;
+  width: 100%;
+}
+
+.confirm-modal h2 {
+  color: #102a43;
+  margin: 0 0 10px;
+}
+
+.confirm-modal p {
+  color: #52606d;
+  font-weight: 600;
+  line-height: 1.5;
+  margin: 0 0 20px;
+}
+
+.actions {
+  align-items: end;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+button {
+  background: #2563eb;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  font-weight: 800;
+  padding: 10px 16px;
+}
+
+button.secondary {
+  background: #e2e8f0;
+  color: #102a43;
+}
+
+button.danger-button {
+  background: #dc2626;
+}
