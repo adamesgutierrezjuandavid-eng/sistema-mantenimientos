@@ -1,0 +1,157 @@
+.panel {
+  background: #ffffff;
+  border: 1px solid #d9e2ec;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(16, 42, 67, 0.06);
+  margin-bottom: 20px;
+  padding: 24px;
+}
+
+h2 {
+  color: #102a43;
+  font-size: 22px;
+  margin-top: 0;
+}
+
+.filters {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr auto;
+  margin-bottom: 18px;
+}
+
+label {
+  color: #334e68;
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+input,
+select {
+  background: #ffffff;
+  border: 1px solid #bcccdc;
+  border-radius: 6px;
+  color: #102a43;
+  font-size: 15px;
+  outline: none;
+  padding: 10px 12px;
+  width: 100%;
+}
+
+input:focus,
+select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+}
+
+.actions {
+  align-items: end;
+  display: flex;
+  gap: 8px;
+}
+
+button {
+  background: #2563eb;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  font-weight: 800;
+  padding: 10px 16px;
+}
+
+button.secondary {
+  background: #e2e8f0;
+  color: #102a43;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  border-collapse: collapse;
+  min-width: 760px;
+  width: 100%;
+}
+
+th,
+td {
+  border-bottom: 1px solid #d9e2ec;
+  padding: 12px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+th {
+  background: #f1f5f9;
+  color: #102a43;
+  font-size: 13px;
+  text-transform: uppercase;
+}
+
+tbody tr:hover {
+  background: #f8fafc;
+}
+
+.status {
+  background: #dcfce7;
+  border-radius: 999px;
+  color: #166534;
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 4px 10px;
+}
+
+.status.inactive {
+  background: #e2e8f0;
+  color: #475569;
+}
+
+.status.maintenance {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.message {
+  color: #334e68;
+  font-weight: 700;
+  margin-top: 12px;
+}
+
+.pagination {
+  align-items: center;
+  border-top: 1px solid #d9e2ec;
+  color: #52606d;
+  display: flex;
+  font-size: 14px;
+  font-weight: 700;
+  justify-content: space-between;
+  margin-top: 16px;
+  padding-top: 16px;
+}
+
+.pagination div {
+  display: flex;
+  gap: 8px;
+}
+
+@media (max-width: 760px) {
+  .filters {
+    grid-template-columns: 1fr;
+  }
+
+  .actions,
+  .pagination {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}

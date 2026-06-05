@@ -1,0 +1,116 @@
+<section class="panel">
+  <h2>Lista de equipos</h2>
+
+  <form class="filters" (ngSubmit)="filtrar.emit()">
+    <div>
+      <label>Buscar</label>
+      <input
+        type="text"
+        name="texto"
+        [(ngModel)]="filtros.texto"
+        placeholder="Codigo, serial, nombre, marca o modelo"
+      />
+    </div>
+
+    <div>
+      <label>Area</label>
+      <input
+        type="text"
+        name="area"
+        [(ngModel)]="filtros.area"
+        placeholder="Produccion"
+      />
+    </div>
+
+    <div>
+      <label>Estado</label>
+      <select name="estado" [(ngModel)]="filtros.estado">
+        <option value="">Todos</option>
+        <option value="activo">Activo</option>
+        <option value="inactivo">Inactivo</option>
+        <option value="en mantenimiento">En mantenimiento</option>
+      </select>
+    </div>
+
+    <div>
+      <label>Asignacion</label>
+      <input
+        type="text"
+        name="asignacion"
+        [(ngModel)]="filtros.asignacion"
+        placeholder="Linea, proceso o responsable"
+      />
+    </div>
+
+    <div class="actions">
+      <button type="submit">Filtrar</button>
+      <button type="button" class="secondary" (click)="limpiar.emit()">Limpiar</button>
+    </div>
+  </form>
+
+  <div class="table-wrap">
+    <table *ngIf="equipos.length > 0">
+      <thead>
+        <tr>
+          <th>Equipo</th>
+          <th>Codigo</th>
+          <th>Serial</th>
+          <th>Area</th>
+          <th>Asignacion</th>
+          <th>Estado</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of equipos">
+          <td>{{ item.nombre }}</td>
+          <td>{{ item.codigo_barras }}</td>
+          <td>{{ item.serial }}</td>
+          <td>{{ item.area }}</td>
+          <td>{{ item.asignacion || 'Sin asignacion' }}</td>
+          <td>
+            <span
+              class="status"
+              [class.inactive]="item.estado === 'inactivo'"
+              [class.maintenance]="item.estado === 'en mantenimiento'"
+            >
+              {{ item.estado }}
+            </span>
+          </td>
+          <td>
+            <button type="button" class="secondary" (click)="seleccionar.emit(item)">Ver</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="message" *ngIf="equipos.length === 0">
+    No hay equipos con esos filtros.
+  </p>
+
+  <div class="pagination" *ngIf="paginacion.total > 0">
+    <span>
+      Pagina {{ paginacion.page }} de {{ paginacion.totalPages }}
+      - {{ paginacion.total }} equipo(s)
+    </span>
+    <div>
+      <button
+        type="button"
+        class="secondary"
+        [disabled]="paginacion.page <= 1"
+        (click)="cambiarPagina.emit(paginacion.page - 1)"
+      >
+        Anterior
+      </button>
+      <button
+        type="button"
+        class="secondary"
+        [disabled]="paginacion.page >= paginacion.totalPages"
+        (click)="cambiarPagina.emit(paginacion.page + 1)"
+      >
+        Siguiente
+      </button>
+    </div>
+  </div>
+</section>
