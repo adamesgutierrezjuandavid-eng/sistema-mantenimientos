@@ -1,0 +1,54 @@
+<section class="panel">
+  <h2>Informacion del equipo</h2>
+
+  <div class="grid">
+    <div>
+      <span>Nombre</span>
+      <strong>{{ equipo.nombre }}</strong>
+    </div>
+    <div>
+      <span>Codigo de barras</span>
+      <strong>{{ equipo.codigo_barras }}</strong>
+    </div>
+    <div>
+      <span>Serial</span>
+      <strong>{{ equipo.serial }}</strong>
+    </div>
+    <div>
+      <span>Marca</span>
+      <strong>{{ equipo.marca }}</strong>
+    </div>
+    <div>
+      <span>Modelo</span>
+      <strong>{{ equipo.modelo }}</strong>
+    </div>
+    <div>
+      <span>Ubicacion</span>
+      <strong>{{ equipo.ubicacion }}</strong>
+    </div>
+    <div>
+      <span>Area</span>
+      <strong>{{ equipo.area }}</strong>
+    </div>
+    <div>
+      <span>Asignacion</span>
+      <strong>{{ equipo.asignacion || 'Sin asignacion' }}</strong>
+    </div>
+    <div>
+      <span>Estado</span>
+      <strong>{{ equipo.estado }}</strong>
+    </div>
+  </div>
+
+  <div class="actions top-space">
+    <button type="button" class="secondary" (click)="editar.emit()">
+      Editar equipo
+    </button>
+    <button type="button" class="danger-button" (click)="eliminar.emit()">
+      Eliminar equipo
+    </button>
+    <button type="button" (click)="alternarMantenimiento.emit()">
+      {{ mostrandoFormularioMantenimiento ? 'Cancelar mantenimiento' : 'Agregar mantenimiento' }}
+    </button>
+  </div>
+</section>

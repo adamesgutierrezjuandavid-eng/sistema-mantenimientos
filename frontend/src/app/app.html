@@ -235,60 +235,14 @@
 </section>
   </section>
 
-  <section class="panel" *ngIf="equipo">
-    <h2>Informacion del equipo</h2>
-
-    <div class="grid">
-      <div>
-        <span>Nombre</span>
-        <strong>{{ equipo.nombre }}</strong>
-      </div>
-      <div>
-        <span>Codigo de barras</span>
-        <strong>{{ equipo.codigo_barras }}</strong>
-      </div>
-      <div>
-        <span>Serial</span>
-        <strong>{{ equipo.serial }}</strong>
-      </div>
-      <div>
-        <span>Marca</span>
-        <strong>{{ equipo.marca }}</strong>
-      </div>
-      <div>
-        <span>Modelo</span>
-        <strong>{{ equipo.modelo }}</strong>
-      </div>
-      <div>
-        <span>Ubicacion</span>
-        <strong>{{ equipo.ubicacion }}</strong>
-      </div>
-      <div>
-        <span>Area</span>
-        <strong>{{ equipo.area }}</strong>
-      </div>
-      <div>
-        <span>Asignacion</span>
-        <strong>{{ equipo.asignacion || 'Sin asignacion' }}</strong>
-      </div>
-      <div>
-        <span>Estado</span>
-        <strong>{{ equipo.estado }}</strong>
-      </div>
-    </div>
-
-    <div class="actions top-space">
-      <button type="button" class="secondary" (click)="cargarEquipoParaEditar()">
-        Editar equipo
-      </button>
-      <button type="button" class="danger-button" (click)="eliminarEquipo()">
-        Eliminar equipo
-      </button>
-      <button type="button" (click)="mostrarFormularioMantenimiento = !mostrarFormularioMantenimiento">
-        {{ mostrarFormularioMantenimiento ? 'Cancelar mantenimiento' : 'Agregar mantenimiento' }}
-      </button>
-    </div>
-  </section>
+  <app-equipo-ficha
+    *ngIf="equipo"
+    [equipo]="equipo"
+    [mostrandoFormularioMantenimiento]="mostrarFormularioMantenimiento"
+    (editar)="cargarEquipoParaEditar()"
+    (eliminar)="eliminarEquipo()"
+    (alternarMantenimiento)="mostrarFormularioMantenimiento = !mostrarFormularioMantenimiento"
+  ></app-equipo-ficha>
 
   <section class="panel" *ngIf="equipo && mostrarFormularioEdicionEquipo">
     <h2>Editar equipo</h2>
@@ -355,20 +309,10 @@
     </form>
   </section>
 
-  <section
-    class="maintenance-alert"
+  <app-mantenimiento-alerta
     *ngIf="equipo"
-    [class.overdue]="alertaMantenimiento.estado === 'vencido'"
-    [class.soon]="alertaMantenimiento.estado === 'proximo'"
-    [class.ok]="alertaMantenimiento.estado === 'al-dia'"
-    [class.empty]="alertaMantenimiento.estado === 'sin-fecha'"
-  >
-    <div>
-      <span>Estado de mantenimiento</span>
-      <strong>{{ alertaMantenimiento.titulo }}</strong>
-    </div>
-    <p>{{ alertaMantenimiento.detalle }}</p>
-  </section>
+    [alerta]="alertaMantenimiento"
+  ></app-mantenimiento-alerta>
 
 <section class="panel" *ngIf="equipo && mostrarFormularioMantenimiento">
   <h2>Registrar mantenimiento</h2>

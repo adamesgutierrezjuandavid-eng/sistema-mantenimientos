@@ -329,8 +329,7 @@ body {
   background: #ef4444;
 }
 
-.panel,
-.maintenance-alert {
+.panel {
   background: #ffffff;
   border: 1px solid #d9e2ec;
   border-radius: 8px;
@@ -467,33 +466,6 @@ button:disabled {
   opacity: 0.55;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-}
-
-.grid div {
-  background: #f8fafc;
-  border: 1px solid #edf2f7;
-  border-radius: 6px;
-  padding: 13px;
-}
-
-.grid span {
-  color: #627d98;
-  display: block;
-  font-size: 12px;
-  font-weight: 800;
-  margin-bottom: 5px;
-  text-transform: uppercase;
-}
-
-.grid strong {
-  color: #102a43;
-  display: block;
-}
-
 .maintenance-form,
 .filters {
   display: grid;
@@ -516,51 +488,6 @@ button:disabled {
 
 .search-actions {
   margin-top: 14px;
-}
-
-.top-space {
-  margin-top: 18px;
-}
-
-.maintenance-alert {
-  margin-bottom: 20px;
-  padding: 18px 22px;
-}
-
-.maintenance-alert span {
-  color: #627d98;
-  display: block;
-  font-size: 12px;
-  font-weight: 800;
-  margin-bottom: 4px;
-  text-transform: uppercase;
-}
-
-.maintenance-alert strong {
-  color: #102a43;
-  display: block;
-  font-size: 22px;
-}
-
-.maintenance-alert p {
-  color: #334e68;
-  margin: 10px 0 0;
-}
-
-.maintenance-alert.overdue {
-  border-left: 5px solid #dc2626;
-}
-
-.maintenance-alert.soon {
-  border-left: 5px solid #f59e0b;
-}
-
-.maintenance-alert.ok {
-  border-left: 5px solid #16a34a;
-}
-
-.maintenance-alert.empty {
-  border-left: 5px solid #64748b;
 }
 
 .message {
@@ -702,7 +629,6 @@ tbody tr:hover {
     width: 100%;
   }
 
-  .grid,
   .maintenance-form,
   .filters,
   .search-row,

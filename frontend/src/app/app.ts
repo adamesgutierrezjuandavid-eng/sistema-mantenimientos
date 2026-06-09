@@ -5,7 +5,9 @@ import { Equipos, Equipo, EstadoApi, EvidenciaMantenimiento, Mantenimiento, Mant
 import { AuthService, UsuarioSesion } from './services/auth';
 import { ConfirmModal } from './components/confirm-modal/confirm-modal';
 import { Dashboard } from './components/dashboard/dashboard';
+import { EquipoFicha } from './components/equipo-ficha/equipo-ficha';
 import { EquiposList } from './components/equipos-list/equipos-list';
+import { MantenimientoAlerta } from './components/mantenimiento-alerta/mantenimiento-alerta';
 import { MantenimientoDetalle } from './components/mantenimiento-detalle/mantenimiento-detalle';
 import { ParticlesMctBackground } from './components/particles-mct-background/particles-mct-background';
 import { ReportesList } from './components/reportes-list/reportes-list';
@@ -22,7 +24,9 @@ type AccionConfirmacion = 'eliminar-evidencia' | 'eliminar-mantenimiento' | 'eli
     DatePipe,
     ConfirmModal,
     Dashboard,
+    EquipoFicha,
     EquiposList,
+    MantenimientoAlerta,
     MantenimientoDetalle,
     ParticlesMctBackground,
     ReportesList

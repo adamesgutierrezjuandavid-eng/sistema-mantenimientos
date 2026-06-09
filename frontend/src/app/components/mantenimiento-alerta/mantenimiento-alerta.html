@@ -1,0 +1,13 @@
+<section
+  class="maintenance-alert"
+  [class.overdue]="alerta.estado === 'vencido'"
+  [class.soon]="alerta.estado === 'proximo'"
+  [class.ok]="alerta.estado === 'al-dia'"
+  [class.empty]="alerta.estado === 'sin-fecha'"
+>
+  <div>
+    <span>Estado de mantenimiento</span>
+    <strong>{{ alerta.titulo }}</strong>
+  </div>
+  <p>{{ alerta.detalle }}</p>
+</section>
