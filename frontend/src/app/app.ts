@@ -9,6 +9,7 @@ import { EquipoFicha } from './components/equipo-ficha/equipo-ficha';
 import { EquiposList } from './components/equipos-list/equipos-list';
 import { MantenimientoAlerta } from './components/mantenimiento-alerta/mantenimiento-alerta';
 import { MantenimientoDetalle } from './components/mantenimiento-detalle/mantenimiento-detalle';
+import { MantenimientoForm } from './components/mantenimiento-form/mantenimiento-form';
 import { ParticlesMctBackground } from './components/particles-mct-background/particles-mct-background';
 import { ReportesList } from './components/reportes-list/reportes-list';
 
@@ -28,6 +29,7 @@ type AccionConfirmacion = 'eliminar-evidencia' | 'eliminar-mantenimiento' | 'eli
     EquiposList,
     MantenimientoAlerta,
     MantenimientoDetalle,
+    MantenimientoForm,
     ParticlesMctBackground,
     ReportesList
   ],

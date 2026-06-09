@@ -314,98 +314,13 @@
     [alerta]="alertaMantenimiento"
   ></app-mantenimiento-alerta>
 
-<section class="panel" *ngIf="equipo && mostrarFormularioMantenimiento">
-  <h2>Registrar mantenimiento</h2>
-
-  <form class="maintenance-form" (ngSubmit)="registrarMantenimiento()">
-    <div>
-      <label>Fecha mantenimiento *</label>
-      <input
-        type="date"
-        name="fecha_mantenimiento"
-        [(ngModel)]="nuevoMantenimiento.fecha_mantenimiento"
-      />
-    </div>
-
-    <div>
-      <label>Tipo *</label>
-      <select
-        name="tipo_mantenimiento"
-        [(ngModel)]="nuevoMantenimiento.tipo_mantenimiento"
-      >
-        <option value="preventivo">Preventivo</option>
-        <option value="correctivo">Correctivo</option>
-        <option value="predictivo">Predictivo</option>
-      </select>
-    </div>
-
-    <div>
-      <label>Tecnico *</label>
-      <input
-        type="text"
-        name="tecnico"
-        [(ngModel)]="nuevoMantenimiento.tecnico"
-      />
-    </div>
-
-    <div>
-      <label>Estado</label>
-      <select
-        name="estado"
-        [(ngModel)]="nuevoMantenimiento.estado"
-      >
-        <option value="terminado">Terminado</option>
-        <option value="pendiente">Pendiente</option>
-        <option value="en proceso">En proceso</option>
-      </select>
-    </div>
-
-    <div class="full">
-      <label>Descripcion *</label>
-      <textarea
-        name="descripcion"
-        rows="3"
-        [(ngModel)]="nuevoMantenimiento.descripcion"
-      ></textarea>
-    </div>
-
-    <div class="full">
-      <label>Observaciones</label>
-      <textarea
-        name="observaciones"
-        rows="2"
-        [(ngModel)]="nuevoMantenimiento.observaciones"
-      ></textarea>
-    </div>
-
-    <div>
-      <label>Proxima fecha</label>
-      <input
-        type="date"
-        name="proxima_fecha"
-        [(ngModel)]="nuevoMantenimiento.proxima_fecha"
-      />
-    </div>
-
-    <div>
-      <label>Fotos de evidencia</label>
-      <input
-        type="file"
-        name="fotos_evidencia"
-        accept="image/*"
-        multiple
-        (change)="seleccionarFotosNuevoMantenimiento($event)"
-      />
-      <p class="hint" *ngIf="archivosNuevoMantenimiento.length > 0">
-        {{ archivosNuevoMantenimiento.length }} foto(s) seleccionada(s)
-      </p>
-    </div>
-
-    <div class="actions">
-      <button type="submit">Guardar mantenimiento</button>
-    </div>
-  </form>
-</section>
+<app-mantenimiento-form
+  *ngIf="equipo && mostrarFormularioMantenimiento"
+  [mantenimiento]="nuevoMantenimiento"
+  [archivosSeleccionados]="archivosNuevoMantenimiento"
+  (guardar)="registrarMantenimiento()"
+  (seleccionarFotos)="seleccionarFotosNuevoMantenimiento($event)"
+></app-mantenimiento-form>
 
   <section class="panel" *ngIf="equipo">
     <div class="section-header">
