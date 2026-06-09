@@ -1,0 +1,265 @@
+.panel {
+  background: #ffffff;
+  border: 1px solid #d9e2ec;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(16, 42, 67, 0.06);
+  margin-bottom: 20px;
+  padding: 24px;
+}
+
+.detail-panel {
+  border-left: 5px solid #2563eb;
+}
+
+.detail-header {
+  align-items: start;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+}
+
+.detail-header h2 {
+  color: #102a43;
+  font-size: 22px;
+  margin: 0;
+}
+
+.detail-header p {
+  color: #627d98;
+  font-weight: 800;
+  margin: 0;
+}
+
+.actions {
+  align-items: end;
+  display: flex;
+  gap: 8px;
+}
+
+button {
+  background: #2563eb;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  font-weight: 800;
+  padding: 10px 16px;
+}
+
+button:hover {
+  background: #1d4ed8;
+}
+
+button.secondary {
+  background: #e2e8f0;
+  color: #102a43;
+}
+
+button.secondary:hover {
+  background: #cbd5e1;
+}
+
+button.danger-button {
+  background: #dc2626;
+}
+
+button.danger-button:hover {
+  background: #b91c1c;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.grid div {
+  background: #f8fafc;
+  border: 1px solid #edf2f7;
+  border-radius: 6px;
+  padding: 13px;
+}
+
+.grid span {
+  color: #627d98;
+  display: block;
+  font-size: 12px;
+  font-weight: 800;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+
+.grid strong {
+  color: #102a43;
+  display: block;
+}
+
+.detail-text {
+  background: #f8fafc;
+  border: 1px solid #edf2f7;
+  border-radius: 6px;
+  margin-top: 16px;
+  padding: 16px;
+}
+
+.detail-text h3 {
+  color: #102a43;
+  font-size: 16px;
+  margin: 0 0 8px;
+}
+
+.detail-text p {
+  color: #334e68;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.evidence-box {
+  border-top: 1px solid #d9e2ec;
+  margin-top: 18px;
+  padding-top: 18px;
+}
+
+.section-header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.evidence-box h3 {
+  color: #102a43;
+  font-size: 18px;
+  margin: 0;
+}
+
+.evidence-upload {
+  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+}
+
+input,
+select,
+textarea {
+  background: #ffffff;
+  border: 1px solid #bcccdc;
+  border-radius: 6px;
+  color: #102a43;
+  font-size: 15px;
+  outline: none;
+  padding: 10px 12px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  width: 100%;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+}
+
+.hint {
+  color: #627d98;
+  font-size: 13px;
+  font-weight: 700;
+  margin: 8px 0 0;
+}
+
+.message {
+  color: #334e68;
+  font-weight: 700;
+  margin-top: 12px;
+}
+
+.message.error {
+  color: #b91c1c;
+}
+
+.evidence-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.evidence-card {
+  background: #f8fafc;
+  border: 1px solid #d9e2ec;
+  border-radius: 8px;
+  color: #334e68;
+  display: block;
+  overflow: hidden;
+  text-decoration: none;
+}
+
+.evidence-card a {
+  display: block;
+}
+
+.evidence-grid img {
+  aspect-ratio: 4 / 3;
+  display: block;
+  object-fit: cover;
+  width: 100%;
+}
+
+.evidence-grid span {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  overflow: hidden;
+  padding: 8px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.evidence-card button {
+  border-radius: 0;
+  width: 100%;
+}
+
+.maintenance-form {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.maintenance-form label {
+  color: #334e68;
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.maintenance-form .full {
+  grid-column: 1 / -1;
+}
+
+.edit-maintenance {
+  border-top: 1px solid #d9e2ec;
+  margin-top: 18px;
+  padding-top: 18px;
+}
+
+@media (max-width: 760px) {
+  .grid,
+  .evidence-grid,
+  .maintenance-form,
+  .section-header,
+  .detail-header,
+  .actions {
+    align-items: stretch;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .evidence-upload {
+    grid-template-columns: 1fr;
+  }
+}

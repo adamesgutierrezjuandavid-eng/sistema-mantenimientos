@@ -1,0 +1,150 @@
+<section class="panel detail-panel">
+  <div class="detail-header">
+    <div>
+      <h2>Detalle del mantenimiento</h2>
+      <p>{{ mantenimiento.fecha_mantenimiento | date:'yyyy-MM-dd' }}</p>
+    </div>
+    <div class="actions">
+      <button type="button" (click)="editar.emit(mantenimiento)">Editar</button>
+      <button type="button" class="danger-button" (click)="eliminar.emit()">Eliminar</button>
+      <button type="button" class="secondary" (click)="cerrar.emit()">Cerrar</button>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div>
+      <span>Tipo</span>
+      <strong>{{ mantenimiento.tipo_mantenimiento }}</strong>
+    </div>
+    <div>
+      <span>Tecnico</span>
+      <strong>{{ mantenimiento.tecnico }}</strong>
+    </div>
+    <div>
+      <span>Estado</span>
+      <strong>{{ mantenimiento.estado }}</strong>
+    </div>
+    <div>
+      <span>Proxima fecha</span>
+      <strong>{{ mantenimiento.proxima_fecha | date:'yyyy-MM-dd' }}</strong>
+    </div>
+  </div>
+
+  <div class="detail-text">
+    <h3>Descripcion</h3>
+    <p>{{ mantenimiento.descripcion }}</p>
+  </div>
+
+  <div class="detail-text">
+    <h3>Observaciones</h3>
+    <p>{{ mantenimiento.observaciones || 'Sin observaciones' }}</p>
+  </div>
+
+  <div class="evidence-box">
+    <div class="section-header">
+      <h3>Evidencias fotograficas</h3>
+      <button
+        type="button"
+        class="secondary"
+        (click)="actualizarEvidencias.emit(mantenimiento.id)"
+      >
+        Actualizar
+      </button>
+    </div>
+
+    <div class="evidence-upload">
+      <input
+        type="file"
+        accept="image/*"
+        multiple
+        (change)="seleccionarFotos.emit($event)"
+      />
+      <button type="button" (click)="subirFotos.emit()">Subir fotos</button>
+    </div>
+
+    <p class="hint" *ngIf="archivosSeleccionados.length > 0">
+      {{ archivosSeleccionados.length }} foto(s) lista(s) para subir
+    </p>
+
+    <p class="message" *ngIf="cargandoEvidencias">
+      Cargando evidencias...
+    </p>
+
+    <p class="message error" *ngIf="mensajeEvidencias">
+      {{ mensajeEvidencias }}
+    </p>
+
+    <div class="evidence-grid" *ngIf="!cargandoEvidencias && evidencias.length > 0">
+      <div
+        class="evidence-card"
+        *ngFor="let evidencia of evidencias"
+      >
+        <a
+          [href]="urlEvidencia(evidencia)"
+          target="_blank"
+          rel="noopener"
+        >
+          <img [src]="urlEvidencia(evidencia)" [alt]="evidencia.nombre_archivo" />
+        </a>
+        <span>{{ evidencia.nombre_archivo }}</span>
+        <button type="button" class="danger-button" (click)="eliminarEvidencia.emit(evidencia)">
+          Eliminar
+        </button>
+      </div>
+    </div>
+
+    <p class="message" *ngIf="!cargandoEvidencias && !mensajeEvidencias && evidencias.length === 0">
+      Este mantenimiento aun no tiene fotos de evidencia.
+    </p>
+  </div>
+
+  <form class="maintenance-form edit-maintenance" *ngIf="mantenimientoEditando" (ngSubmit)="guardarEdicion.emit()">
+    <div>
+      <label>Fecha mantenimiento *</label>
+      <input type="date" name="edit_mant_fecha" [(ngModel)]="datosEditando.fecha_mantenimiento" />
+    </div>
+
+    <div>
+      <label>Tipo *</label>
+      <select name="edit_mant_tipo" [(ngModel)]="datosEditando.tipo_mantenimiento">
+        <option value="preventivo">Preventivo</option>
+        <option value="correctivo">Correctivo</option>
+        <option value="predictivo">Predictivo</option>
+      </select>
+    </div>
+
+    <div>
+      <label>Tecnico *</label>
+      <input type="text" name="edit_mant_tecnico" [(ngModel)]="datosEditando.tecnico" />
+    </div>
+
+    <div>
+      <label>Estado</label>
+      <select name="edit_mant_estado" [(ngModel)]="datosEditando.estado">
+        <option value="terminado">Terminado</option>
+        <option value="pendiente">Pendiente</option>
+        <option value="en proceso">En proceso</option>
+      </select>
+    </div>
+
+    <div class="full">
+      <label>Descripcion *</label>
+      <textarea name="edit_mant_descripcion" rows="3" [(ngModel)]="datosEditando.descripcion"></textarea>
+    </div>
+
+    <div class="full">
+      <label>Observaciones</label>
+      <textarea name="edit_mant_observaciones" rows="2" [(ngModel)]="datosEditando.observaciones"></textarea>
+    </div>
+
+    <div>
+      <label>Proxima fecha</label>
+      <input type="date" name="edit_mant_proxima" [(ngModel)]="datosEditando.proxima_fecha" />
+    </div>
+
+    <div class="actions">
+      <button type="submit">Guardar cambios</button>
+      <button type="button" class="secondary" (click)="cancelarEdicion.emit()">Cancelar</button>
+    </div>
+  </form>
+</section>

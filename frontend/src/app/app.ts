@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { DatePipe, NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { environment } from '../environments/environment';
 import { Equipos, Equipo, EstadoApi, EvidenciaMantenimiento, Mantenimiento, MantenimientoReporte, PaginationMeta, ResumenDashboard } from './services/equipos';
 import { AuthService, UsuarioSesion } from './services/auth';
 import { ConfirmModal } from './components/confirm-modal/confirm-modal';
 import { Dashboard } from './components/dashboard/dashboard';
 import { EquiposList } from './components/equipos-list/equipos-list';
+import { MantenimientoDetalle } from './components/mantenimiento-detalle/mantenimiento-detalle';
 import { ParticlesMctBackground } from './components/particles-mct-background/particles-mct-background';
 import { ReportesList } from './components/reportes-list/reportes-list';
 
@@ -23,6 +23,7 @@ type AccionConfirmacion = 'eliminar-evidencia' | 'eliminar-mantenimiento' | 'eli
     ConfirmModal,
     Dashboard,
     EquiposList,
+    MantenimientoDetalle,
     ParticlesMctBackground,
     ReportesList
   ],
@@ -457,10 +458,6 @@ confirmarEliminarEvidencia(evidencia: EvidenciaMantenimiento) {
       this.mensaje = 'Error al eliminar la evidencia.';
     }
   });
-}
-
-urlEvidencia(evidencia: EvidenciaMantenimiento) {
-  return `${environment.apiUrl}${evidencia.ruta_archivo}`;
 }
 
 exportarHistorialCsv() {

@@ -636,105 +636,6 @@ tbody tr:hover {
   color: #1d4ed8;
 }
 
-.detail-panel {
-  border-left: 5px solid #2563eb;
-}
-
-.detail-header {
-  align-items: start;
-  display: flex;
-  gap: 16px;
-  justify-content: space-between;
-}
-
-.detail-header p {
-  color: #627d98;
-  font-weight: 800;
-  margin: 0;
-}
-
-.detail-text {
-  background: #f8fafc;
-  border: 1px solid #edf2f7;
-  border-radius: 6px;
-  margin-top: 16px;
-  padding: 16px;
-}
-
-.detail-text h3 {
-  color: #102a43;
-  font-size: 16px;
-  margin: 0 0 8px;
-}
-
-.detail-text p {
-  color: #334e68;
-  line-height: 1.5;
-  margin: 0;
-}
-
-.evidence-box {
-  border-top: 1px solid #d9e2ec;
-  margin-top: 18px;
-  padding-top: 18px;
-}
-
-.evidence-box h3 {
-  color: #102a43;
-  font-size: 18px;
-  margin: 0;
-}
-
-.evidence-upload {
-  align-items: center;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 12px;
-}
-
-.evidence-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  margin-top: 16px;
-}
-
-.evidence-card {
-  background: #f8fafc;
-  border: 1px solid #d9e2ec;
-  border-radius: 8px;
-  color: #334e68;
-  display: block;
-  overflow: hidden;
-  text-decoration: none;
-}
-
-.evidence-card a {
-  display: block;
-}
-
-.evidence-grid img {
-  aspect-ratio: 4 / 3;
-  display: block;
-  object-fit: cover;
-  width: 100%;
-}
-
-.evidence-grid span {
-  display: block;
-  font-size: 12px;
-  font-weight: 700;
-  overflow: hidden;
-  padding: 8px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.evidence-card button {
-    border-radius: 0;
-    width: 100%;
-  }
-
 .pagination {
   align-items: center;
   border-top: 1px solid #d9e2ec;
@@ -750,12 +651,6 @@ tbody tr:hover {
 .pagination div {
   display: flex;
   gap: 8px;
-}
-
-.edit-maintenance {
-  border-top: 1px solid #d9e2ec;
-  margin-top: 18px;
-  padding-top: 18px;
 }
 
 @media (max-width: 760px) {
@@ -808,12 +703,10 @@ tbody tr:hover {
   }
 
   .grid,
-  .evidence-grid,
   .maintenance-form,
   .filters,
   .search-row,
   .section-header,
-  .detail-header,
   .actions {
     align-items: stretch;
     flex-direction: column;
@@ -827,9 +720,5 @@ tbody tr:hover {
     align-items: stretch;
     flex-direction: column;
     gap: 10px;
-  }
-
-  .evidence-upload {
-    grid-template-columns: 1fr;
   }
 }

@@ -519,156 +519,25 @@
     </p>
   </section>
 
-  <section class="panel detail-panel" *ngIf="mantenimientoSeleccionado">
-    <div class="detail-header">
-      <div>
-        <h2>Detalle del mantenimiento</h2>
-        <p>{{ mantenimientoSeleccionado.fecha_mantenimiento | date:'yyyy-MM-dd' }}</p>
-      </div>
-      <div class="actions">
-        <button type="button" (click)="editarMantenimiento(mantenimientoSeleccionado)">Editar</button>
-        <button type="button" class="danger-button" (click)="eliminarMantenimiento()">Eliminar</button>
-        <button type="button" class="secondary" (click)="cerrarDetalleMantenimiento()">Cerrar</button>
-      </div>
-    </div>
-
-    <div class="grid">
-      <div>
-        <span>Tipo</span>
-        <strong>{{ mantenimientoSeleccionado.tipo_mantenimiento }}</strong>
-      </div>
-      <div>
-        <span>Tecnico</span>
-        <strong>{{ mantenimientoSeleccionado.tecnico }}</strong>
-      </div>
-      <div>
-        <span>Estado</span>
-        <strong>{{ mantenimientoSeleccionado.estado }}</strong>
-      </div>
-      <div>
-        <span>Proxima fecha</span>
-        <strong>{{ mantenimientoSeleccionado.proxima_fecha | date:'yyyy-MM-dd' }}</strong>
-      </div>
-    </div>
-
-    <div class="detail-text">
-      <h3>Descripcion</h3>
-      <p>{{ mantenimientoSeleccionado.descripcion }}</p>
-    </div>
-
-    <div class="detail-text">
-      <h3>Observaciones</h3>
-      <p>{{ mantenimientoSeleccionado.observaciones || 'Sin observaciones' }}</p>
-    </div>
-
-    <div class="evidence-box">
-      <div class="section-header">
-        <h3>Evidencias fotograficas</h3>
-        <button
-          type="button"
-          class="secondary"
-          (click)="cargarEvidencias(mantenimientoSeleccionado.id)"
-        >
-          Actualizar
-        </button>
-      </div>
-
-      <div class="evidence-upload">
-        <input
-          type="file"
-          accept="image/*"
-          multiple
-          (change)="seleccionarFotosDetalle($event)"
-        />
-        <button type="button" (click)="subirFotosDetalle()">Subir fotos</button>
-      </div>
-
-      <p class="hint" *ngIf="archivosDetalleMantenimiento.length > 0">
-        {{ archivosDetalleMantenimiento.length }} foto(s) lista(s) para subir
-      </p>
-
-      <p class="message" *ngIf="cargandoEvidencias">
-        Cargando evidencias...
-      </p>
-
-      <p class="message error" *ngIf="mensajeEvidencias">
-        {{ mensajeEvidencias }}
-      </p>
-
-      <div class="evidence-grid" *ngIf="!cargandoEvidencias && evidenciasMantenimiento.length > 0">
-        <div
-          class="evidence-card"
-          *ngFor="let evidencia of evidenciasMantenimiento"
-        >
-          <a
-            [href]="urlEvidencia(evidencia)"
-            target="_blank"
-            rel="noopener"
-          >
-            <img [src]="urlEvidencia(evidencia)" [alt]="evidencia.nombre_archivo" />
-          </a>
-          <span>{{ evidencia.nombre_archivo }}</span>
-          <button type="button" class="danger-button" (click)="eliminarEvidencia(evidencia)">
-            Eliminar
-          </button>
-        </div>
-      </div>
-
-      <p class="message" *ngIf="!cargandoEvidencias && !mensajeEvidencias && evidenciasMantenimiento.length === 0">
-        Este mantenimiento aun no tiene fotos de evidencia.
-      </p>
-    </div>
-
-    <form class="maintenance-form edit-maintenance" *ngIf="mantenimientoEditando" (ngSubmit)="actualizarMantenimiento()">
-      <div>
-        <label>Fecha mantenimiento *</label>
-        <input type="date" name="edit_mant_fecha" [(ngModel)]="datosMantenimientoEditando.fecha_mantenimiento" />
-      </div>
-
-      <div>
-        <label>Tipo *</label>
-        <select name="edit_mant_tipo" [(ngModel)]="datosMantenimientoEditando.tipo_mantenimiento">
-          <option value="preventivo">Preventivo</option>
-          <option value="correctivo">Correctivo</option>
-          <option value="predictivo">Predictivo</option>
-        </select>
-      </div>
-
-      <div>
-        <label>Tecnico *</label>
-        <input type="text" name="edit_mant_tecnico" [(ngModel)]="datosMantenimientoEditando.tecnico" />
-      </div>
-
-      <div>
-        <label>Estado</label>
-        <select name="edit_mant_estado" [(ngModel)]="datosMantenimientoEditando.estado">
-          <option value="terminado">Terminado</option>
-          <option value="pendiente">Pendiente</option>
-          <option value="en proceso">En proceso</option>
-        </select>
-      </div>
-
-      <div class="full">
-        <label>Descripcion *</label>
-        <textarea name="edit_mant_descripcion" rows="3" [(ngModel)]="datosMantenimientoEditando.descripcion"></textarea>
-      </div>
-
-      <div class="full">
-        <label>Observaciones</label>
-        <textarea name="edit_mant_observaciones" rows="2" [(ngModel)]="datosMantenimientoEditando.observaciones"></textarea>
-      </div>
-
-      <div>
-        <label>Proxima fecha</label>
-        <input type="date" name="edit_mant_proxima" [(ngModel)]="datosMantenimientoEditando.proxima_fecha" />
-      </div>
-
-      <div class="actions">
-        <button type="submit">Guardar cambios</button>
-        <button type="button" class="secondary" (click)="cancelarEdicionMantenimiento()">Cancelar</button>
-      </div>
-    </form>
-  </section>
+  <app-mantenimiento-detalle
+    *ngIf="mantenimientoSeleccionado"
+    [mantenimiento]="mantenimientoSeleccionado"
+    [evidencias]="evidenciasMantenimiento"
+    [cargandoEvidencias]="cargandoEvidencias"
+    [mensajeEvidencias]="mensajeEvidencias"
+    [archivosSeleccionados]="archivosDetalleMantenimiento"
+    [mantenimientoEditando]="mantenimientoEditando"
+    [datosEditando]="datosMantenimientoEditando"
+    (actualizarEvidencias)="cargarEvidencias($event)"
+    (seleccionarFotos)="seleccionarFotosDetalle($event)"
+    (subirFotos)="subirFotosDetalle()"
+    (editar)="editarMantenimiento($event)"
+    (eliminar)="eliminarMantenimiento()"
+    (cerrar)="cerrarDetalleMantenimiento()"
+    (eliminarEvidencia)="eliminarEvidencia($event)"
+    (guardarEdicion)="actualizarMantenimiento()"
+    (cancelarEdicion)="cancelarEdicionMantenimiento()"
+  ></app-mantenimiento-detalle>
   </ng-container>
 
   <ng-container *ngIf="vistaActiva === 'reportes'">
