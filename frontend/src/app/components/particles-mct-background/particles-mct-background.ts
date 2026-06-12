@@ -42,10 +42,10 @@ export class ParticlesMctBackground implements AfterViewInit, OnDestroy {
   private height = 0;
   private frame = 0;
   private cardRect: DOMRect | null = null;
-  private readonly floatingParticleCount = 140;
-  private readonly connectionDistance = 64;
-  private readonly lineOpacity = 0.08;
-  private readonly cardGap = 14;
+  private readonly floatingParticleCount = 92;
+  private readonly connectionDistance = 58;
+  private readonly lineOpacity = 0.06;
+  private readonly cardGap = 18;
   private readonly floatingParticlePalette = [
     '248, 113, 113',
     '251, 191, 36',
@@ -57,9 +57,9 @@ export class ParticlesMctBackground implements AfterViewInit, OnDestroy {
     '234, 179, 8'
   ];
   private readonly letterParticleColors = [
-    '255, 255, 255',
-    '220, 38, 38',
-    '37, 99, 235'
+    '239, 68, 68',
+    '245, 158, 11',
+    '252, 211, 77'
   ];
 
   private readonly onResize = () => this.resize();

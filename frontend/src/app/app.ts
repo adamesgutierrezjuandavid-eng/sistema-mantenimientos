@@ -13,6 +13,7 @@ import { MantenimientoAlerta } from './components/mantenimiento-alerta/mantenimi
 import { MantenimientoDetalle } from './components/mantenimiento-detalle/mantenimiento-detalle';
 import { MantenimientoForm } from './components/mantenimiento-form/mantenimiento-form';
 import { MantenimientoHistorial } from './components/mantenimiento-historial/mantenimiento-historial';
+import { ParticlesMctBackground } from './components/particles-mct-background/particles-mct-background';
 import { ReportesList } from './components/reportes-list/reportes-list';
 
 type AccionConfirmacion = 'eliminar-evidencia' | 'eliminar-mantenimiento' | 'eliminar-equipo';
@@ -36,6 +37,7 @@ type AccionConfirmacion = 'eliminar-evidencia' | 'eliminar-mantenimiento' | 'eli
     MantenimientoDetalle,
     MantenimientoForm,
     MantenimientoHistorial,
+    ParticlesMctBackground,
     ReportesList
   ],
   templateUrl: './app.html',
@@ -65,6 +67,7 @@ export class App implements OnInit {
   mensajeLogin = '';
   cargando = false;
   cargandoLogin = false;
+  passwordVisible = false;
   usuarioSesion: UsuarioSesion | null = null;
   credenciales = {
     usuario: '',

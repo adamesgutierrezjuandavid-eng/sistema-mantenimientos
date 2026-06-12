@@ -1,9 +1,17 @@
 <!-- SECCION DE LOGIN DISEÑO FUTURISTA CON PARTICULAS -->
 <main class="login-page" *ngIf="!usuarioSesion">
+  <app-particles-mct-background></app-particles-mct-background>
+
   <section class="login-card">
-    <div class="brand-mark">MCT</div>
-    <span class="eyebrow">Logistica y transporte</span>
-    <h1>MANTENIMIENTO 360º</h1>
+    <div class="login-brand">
+      <div class="brand-mark">MCT</div>
+      <div>
+        <span class="eyebrow">Logistica y transporte</span>
+        <h1>MANTENIMIENTO 360º</h1>
+      </div>
+    </div>
+
+    <p class="login-copy">Plataforma interna para activos, evidencias y mantenimientos tecnicos.</p>
 
     <div class="login-form" autocomplete="off">
       <div>
@@ -13,14 +21,19 @@
 
       <div>
         <label>Contraseña</label>
-        <input
-          #passwordInput
-          type="password"
-          name="login_password"
-          [(ngModel)]="credenciales.password"
-          autocomplete="current-password"
-          (keyup.enter)="iniciarSesion(usuarioInput.value, passwordInput.value); $event.preventDefault()"
-        />
+        <div class="password-field">
+          <input
+            #passwordInput
+            [type]="passwordVisible ? 'text' : 'password'"
+            name="login_password"
+            [(ngModel)]="credenciales.password"
+            autocomplete="current-password"
+            (keyup.enter)="iniciarSesion(usuarioInput.value, passwordInput.value); $event.preventDefault()"
+          />
+          <button type="button" class="password-toggle" (click)="passwordVisible = !passwordVisible">
+            {{ passwordVisible ? 'Ocultar' : 'Mostrar' }}
+          </button>
+        </div>
       </div>
 
       <button type="button" (click)="iniciarSesion(usuarioInput.value, passwordInput.value)" [disabled]="cargandoLogin">
