@@ -1,0 +1,107 @@
+<section class="panel">
+  <h2>{{ titulo }}</h2>
+
+  <form class="equipment-form" (ngSubmit)="guardar.emit()">
+    <div>
+      <label>Codigo de barras *</label>
+      <input
+        type="text"
+        [name]="namePrefix + '_codigo_barras'"
+        [(ngModel)]="equipo.codigo_barras"
+      />
+    </div>
+
+    <div>
+      <label>Serial *</label>
+      <input
+        type="text"
+        [name]="namePrefix + '_serial'"
+        [(ngModel)]="equipo.serial"
+      />
+    </div>
+
+    <div>
+      <label>Nombre *</label>
+      <input
+        type="text"
+        [name]="namePrefix + '_nombre'"
+        [(ngModel)]="equipo.nombre"
+      />
+    </div>
+
+    <div>
+      <label>Marca</label>
+      <input
+        type="text"
+        [name]="namePrefix + '_marca'"
+        [(ngModel)]="equipo.marca"
+      />
+    </div>
+
+    <div>
+      <label>Empresa</label>
+      <input
+        type="text"
+        [name]="namePrefix + '_empresa'"
+        [(ngModel)]="equipo.empresa"
+      />
+    </div>
+
+    <div>
+      <label>Ubicacion</label>
+      <input
+        type="text"
+        [name]="namePrefix + '_ubicacion'"
+        [(ngModel)]="equipo.ubicacion"
+      />
+    </div>
+
+    <div>
+      <label>Area</label>
+      <input
+        type="text"
+        [name]="namePrefix + '_area'"
+        [(ngModel)]="equipo.area"
+      />
+    </div>
+
+    <div>
+      <label>Asignacion</label>
+      <input
+        type="text"
+        [name]="namePrefix + '_asignacion'"
+        [(ngModel)]="equipo.asignacion"
+      />
+    </div>
+
+    <div>
+      <label>Estado</label>
+      <select [name]="namePrefix + '_estado'" [(ngModel)]="equipo.estado">
+        <option value="activo">Activo</option>
+        <option value="inactivo">Inactivo</option>
+        <option value="en mantenimiento">En mantenimiento</option>
+      </select>
+    </div>
+
+    <div>
+      <label>Fecha compra</label>
+      <input
+        type="date"
+        [name]="namePrefix + '_fecha_compra'"
+        [(ngModel)]="equipo.fecha_compra"
+      />
+    </div>
+
+    <div class="actions">
+      <button type="submit">{{ submitLabel }}</button>
+      <button
+        *ngIf="mostrarCancelar"
+        type="button"
+        class="secondary"
+        (click)="cancelar.emit()"
+      >
+        Cancelar
+      </button>
+    </div>
+  </form>
+</section>

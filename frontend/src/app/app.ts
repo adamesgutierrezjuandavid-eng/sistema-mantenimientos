@@ -6,6 +6,7 @@ import { AuthService, UsuarioSesion } from './services/auth';
 import { ConfirmModal } from './components/confirm-modal/confirm-modal';
 import { Dashboard } from './components/dashboard/dashboard';
 import { EquipoFicha } from './components/equipo-ficha/equipo-ficha';
+import { EquipoForm } from './components/equipo-form/equipo-form';
 import { EquiposList } from './components/equipos-list/equipos-list';
 import { MantenimientoAlerta } from './components/mantenimiento-alerta/mantenimiento-alerta';
 import { MantenimientoDetalle } from './components/mantenimiento-detalle/mantenimiento-detalle';
@@ -26,6 +27,7 @@ type AccionConfirmacion = 'eliminar-evidencia' | 'eliminar-mantenimiento' | 'eli
     ConfirmModal,
     Dashboard,
     EquipoFicha,
+    EquipoForm,
     EquiposList,
     MantenimientoAlerta,
     MantenimientoDetalle,

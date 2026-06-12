@@ -180,109 +180,19 @@
     </div>
 
     <div class="actions search-actions" *ngIf="!ultimoCodigoNoEncontrado">
-  <button type="button" class="secondary" (click)="mostrarFormularioEquipo = !mostrarFormularioEquipo">
-    {{ mostrarFormularioEquipo ? 'Cancelar registro de equipo' : 'Registrar nuevo equipo' }}
-  </button>
-</div>
-<section class="panel" *ngIf="mostrarFormularioEquipo">
-  <h2>Registrar nuevo equipo</h2>
-
-  <form class="maintenance-form" (ngSubmit)="registrarEquipo()">
-    <div>
-      <label>Codigo de barras *</label>
-      <input
-        type="text"
-        name="codigo_barras"
-        [(ngModel)]="nuevoEquipo.codigo_barras"
-      />
+      <button type="button" class="secondary" (click)="mostrarFormularioEquipo = !mostrarFormularioEquipo">
+        {{ mostrarFormularioEquipo ? 'Cancelar registro de equipo' : 'Registrar nuevo equipo' }}
+      </button>
     </div>
 
-    <div>
-      <label>Serial *</label>
-      <input
-        type="text"
-        name="serial"
-        [(ngModel)]="nuevoEquipo.serial"
-      />
-    </div>
-
-    <div>
-      <label>Nombre *</label>
-      <input
-        type="text"
-        name="nombre"
-        [(ngModel)]="nuevoEquipo.nombre"
-      />
-    </div>
-
-    <div>
-      <label>Marca</label>
-      <input
-        type="text"
-        name="marca"
-        [(ngModel)]="nuevoEquipo.marca"
-      />
-    </div>
-
-    <div>
-      <label>Empresa</label>
-      <input
-        type="text"
-        name="empresa"
-        [(ngModel)]="nuevoEquipo.empresa"
-      />
-    </div>
-
-    <div>
-      <label>Ubicacion</label>
-      <input
-        type="text"
-        name="ubicacion"
-        [(ngModel)]="nuevoEquipo.ubicacion"
-      />
-    </div>
-
-    <div>
-      <label>Area</label>
-      <input
-        type="text"
-        name="area"
-        [(ngModel)]="nuevoEquipo.area"
-      />
-    </div>
-
-    <div>
-      <label>Asignacion</label>
-      <input
-        type="text"
-        name="asignacion"
-        [(ngModel)]="nuevoEquipo.asignacion"
-      />
-    </div>
-
-    <div>
-      <label>Estado</label>
-      <select name="estado" [(ngModel)]="nuevoEquipo.estado">
-        <option value="activo">Activo</option>
-        <option value="inactivo">Inactivo</option>
-        <option value="en mantenimiento">En mantenimiento</option>
-      </select>
-    </div>
-
-    <div>
-      <label>Fecha compra</label>
-      <input
-        type="date"
-        name="fecha_compra"
-        [(ngModel)]="nuevoEquipo.fecha_compra"
-      />
-    </div>
-
-    <div class="actions">
-      <button type="submit">Guardar equipo</button>
-    </div>
-  </form>
-</section>
+    <app-equipo-form
+      *ngIf="mostrarFormularioEquipo"
+      titulo="Registrar nuevo equipo"
+      [equipo]="nuevoEquipo"
+      submitLabel="Guardar equipo"
+      namePrefix="nuevo_equipo"
+      (guardar)="registrarEquipo()"
+    ></app-equipo-form>
   </section>
 
   <app-equipo-ficha
@@ -294,70 +204,16 @@
     (alternarMantenimiento)="mostrarFormularioMantenimiento = !mostrarFormularioMantenimiento"
   ></app-equipo-ficha>
 
-  <section class="panel" *ngIf="equipo && mostrarFormularioEdicionEquipo">
-    <h2>Editar equipo</h2>
-
-    <form class="maintenance-form" (ngSubmit)="actualizarEquipo()">
-      <div>
-        <label>Codigo de barras *</label>
-        <input type="text" name="edit_codigo_barras" [(ngModel)]="nuevoEquipo.codigo_barras" />
-      </div>
-
-      <div>
-        <label>Serial *</label>
-        <input type="text" name="edit_serial" [(ngModel)]="nuevoEquipo.serial" />
-      </div>
-
-      <div>
-        <label>Nombre *</label>
-        <input type="text" name="edit_nombre" [(ngModel)]="nuevoEquipo.nombre" />
-      </div>
-
-      <div>
-        <label>Marca</label>
-        <input type="text" name="edit_marca" [(ngModel)]="nuevoEquipo.marca" />
-      </div>
-
-      <div>
-        <label>Empresa</label>
-        <input type="text" name="edit_empresa" [(ngModel)]="nuevoEquipo.empresa" />
-      </div>
-
-      <div>
-        <label>Ubicacion</label>
-        <input type="text" name="edit_ubicacion" [(ngModel)]="nuevoEquipo.ubicacion" />
-      </div>
-
-      <div>
-        <label>Area</label>
-        <input type="text" name="edit_area" [(ngModel)]="nuevoEquipo.area" />
-      </div>
-
-      <div>
-        <label>Asignacion</label>
-        <input type="text" name="edit_asignacion" [(ngModel)]="nuevoEquipo.asignacion" />
-      </div>
-
-      <div>
-        <label>Estado</label>
-        <select name="edit_estado" [(ngModel)]="nuevoEquipo.estado">
-          <option value="activo">Activo</option>
-          <option value="inactivo">Inactivo</option>
-          <option value="en mantenimiento">En mantenimiento</option>
-        </select>
-      </div>
-
-      <div>
-        <label>Fecha compra</label>
-        <input type="date" name="edit_fecha_compra" [(ngModel)]="nuevoEquipo.fecha_compra" />
-      </div>
-
-      <div class="actions">
-        <button type="submit">Guardar cambios</button>
-        <button type="button" class="secondary" (click)="mostrarFormularioEdicionEquipo = false">Cancelar</button>
-      </div>
-    </form>
-  </section>
+  <app-equipo-form
+    *ngIf="equipo && mostrarFormularioEdicionEquipo"
+    titulo="Editar equipo"
+    [equipo]="nuevoEquipo"
+    submitLabel="Guardar cambios"
+    namePrefix="edit_equipo"
+    [mostrarCancelar]="true"
+    (guardar)="actualizarEquipo()"
+    (cancelar)="mostrarFormularioEdicionEquipo = false"
+  ></app-equipo-form>
 
   <app-mantenimiento-alerta
     *ngIf="equipo"
