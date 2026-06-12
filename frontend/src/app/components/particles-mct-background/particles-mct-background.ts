@@ -42,19 +42,16 @@ export class ParticlesMctBackground implements AfterViewInit, OnDestroy {
   private height = 0;
   private frame = 0;
   private cardRect: DOMRect | null = null;
-  private readonly floatingParticleCount = 92;
-  private readonly connectionDistance = 58;
-  private readonly lineOpacity = 0.06;
-  private readonly cardGap = 18;
+  private readonly floatingParticleCount = 68;
+  private readonly connectionDistance = 54;
+  private readonly lineOpacity = 0.045;
+  private readonly cardGap = 26;
   private readonly floatingParticlePalette = [
-    '248, 113, 113',
-    '251, 191, 36',
-    '56, 189, 248',
-    '187, 247, 208',
-    '192, 132, 252',
-    '34, 197, 94',
-    '14, 165, 233',
-    '234, 179, 8'
+    '59, 130, 246',
+    '96, 165, 250',
+    '148, 163, 184',
+    '51, 65, 85',
+    '30, 41, 59'
   ];
   private readonly letterParticleColors = [
     '239, 68, 68',
@@ -130,7 +127,7 @@ export class ParticlesMctBackground implements AfterViewInit, OnDestroy {
   }
 
   private createMctTargets() {
-    const letterSize = Math.min(50, Math.max(32, this.width * 0.038));
+    const letterSize = Math.min(28, Math.max(18, this.width * 0.022));
     const letterWidth = letterSize * 0.82;
     const letterHeight = letterSize;
     const gap = letterSize * 0.68;
@@ -346,7 +343,7 @@ export class ParticlesMctBackground implements AfterViewInit, OnDestroy {
   }
 
   private drawMctLogo() {
-    const letterSize = Math.min(72, Math.max(48, this.width * 0.05));
+    const letterSize = Math.min(34, Math.max(24, this.width * 0.026));
     const letterWidth = letterSize * 0.9;
     const gap = letterSize * 0.6;
     const totalWidth = 3 * letterWidth + 2 * gap;

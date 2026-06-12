@@ -1,4 +1,4 @@
-<!-- SECCION DE LOGIN DISEÑO FUTURISTA CON PARTICULAS -->
+<!-- Login -->
 <main class="login-page" *ngIf="!usuarioSesion">
   <app-particles-mct-background></app-particles-mct-background>
 
@@ -6,12 +6,10 @@
     <div class="login-brand">
       <div class="brand-mark">MCT</div>
       <div>
-        <span class="eyebrow">Logistica y transporte</span>
-        <h1>MANTENIMIENTO 360º</h1>
+        <span class="eyebrow">Acceso corporativo</span>
+        <h1>Mantenimiento 360º</h1>
       </div>
     </div>
-
-    <p class="login-copy">Plataforma interna para activos, evidencias y mantenimientos tecnicos.</p>
 
     <div class="login-form" autocomplete="off">
       <div>
@@ -31,7 +29,7 @@
             (keyup.enter)="iniciarSesion(usuarioInput.value, passwordInput.value); $event.preventDefault()"
           />
           <button type="button" class="password-toggle" (click)="passwordVisible = !passwordVisible">
-            {{ passwordVisible ? 'Ocultar' : 'Mostrar' }}
+            {{ passwordVisible ? 'Ocultar' : 'Ver' }}
           </button>
         </div>
       </div>
@@ -42,7 +40,6 @@
     </div>
 
     <p class="message error" *ngIf="mensajeLogin">{{ mensajeLogin }}</p>
-    <p class="hint">Usuario inicial: admin / admin123</p>
   </section>
 </main>
 

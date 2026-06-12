@@ -12,8 +12,8 @@
 .login-page {
   align-items: center;
   background:
-    radial-gradient(circle at 20% 12%, rgba(59, 130, 246, 0.18), transparent 28%),
-    radial-gradient(circle at 80% 18%, rgba(245, 158, 11, 0.1), transparent 24%),
+    radial-gradient(circle at 22% 16%, rgba(59, 130, 246, 0.14), transparent 30%),
+    radial-gradient(circle at 78% 20%, rgba(15, 23, 42, 0.72), transparent 32%),
     linear-gradient(180deg, var(--color-bg), #071126);
   display: flex;
   flex-direction: column;
@@ -25,13 +25,13 @@
 }
 
 .login-card {
-  backdrop-filter: blur(22px) saturate(140%);
-  background: linear-gradient(180deg, rgba(15, 23, 42, 0.84), rgba(7, 17, 38, 0.78));
-  border: 1px solid rgba(148, 163, 184, 0.2);
-  border-radius: 22px;
-  box-shadow: 0 32px 100px rgba(0, 0, 0, 0.48);
-  max-width: 460px;
-  padding: 30px;
+  backdrop-filter: blur(18px) saturate(128%);
+  background: rgba(15, 23, 42, 0.82);
+  border: 1px solid rgba(51, 65, 85, 0.88);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.42);
+  max-width: 420px;
+  padding: 28px;
   position: relative;
   width: 100%;
   z-index: 1;
@@ -40,37 +40,25 @@
 .login-brand {
   align-items: center;
   display: flex;
-  gap: 14px;
+  gap: 12px;
 }
 
 .login-brand .brand-mark {
-  height: 52px;
-  width: 52px;
+  height: 54px;
+  width: 54px;
 }
 
 .login-card h1 {
   color: var(--color-text);
-  font-size: 32px;
+  font-size: 30px;
   line-height: 1.05;
   margin: 2px 0 0;
-}
-
-.login-card p {
-  color: var(--color-muted);
-  line-height: 1.75;
-  margin: 0;
-}
-
-.login-copy {
-  border-top: 1px solid rgba(51, 65, 85, 0.72);
-  margin-top: 22px;
-  padding-top: 18px;
 }
 
 .login-form {
   display: grid;
   gap: 16px;
-  margin-top: 24px;
+  margin-top: 26px;
 }
 
 .login-form label {
@@ -81,7 +69,7 @@
 }
 
 .login-form input {
-  background: rgba(2, 6, 23, 0.68);
+  background: rgba(2, 6, 23, 0.76);
   border: 1px solid rgba(51, 65, 85, 0.9);
   border-radius: var(--radius-md);
   color: var(--color-text);
@@ -130,11 +118,10 @@
   background: rgba(15, 23, 42, 0.9);
   border-color: rgba(51, 65, 85, 0.95);
   color: var(--color-text);
-  min-width: 86px;
+  min-width: 72px;
 }
 
-.login-card .message,
-.login-card .hint {
+.login-card .message {
   position: relative;
   z-index: 2;
 }
