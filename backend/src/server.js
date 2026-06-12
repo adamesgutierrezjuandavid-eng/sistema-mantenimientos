@@ -40,6 +40,29 @@ app.get('/api/salud', async (req, res) => {
   }
 });
 
+app.use((req, res) => {
+  res.status(404).json({
+    ok: false,
+    mensaje: 'Ruta no encontrada'
+  });
+});
+
+app.use((error, req, res, _next) => {
+  console.error(error);
+
+  const status = error.statusCode || 500;
+  const response = {
+    ok: false,
+    mensaje: error.message || 'Error interno del servidor'
+  };
+
+  if (process.env.NODE_ENV !== 'production') {
+    response.error = error.message;
+  }
+
+  res.status(status).json(response);
+});
+
 runMigrations()
   .then(() => {
     app.listen(port, () => {

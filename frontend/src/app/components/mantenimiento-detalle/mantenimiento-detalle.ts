@@ -3,11 +3,13 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { environment } from '../../../environments/environment';
 import { EvidenciaMantenimiento, Mantenimiento } from '../../services/equipos';
+import { UsuarioSesion } from '../../services/auth';
 
 export interface DatosMantenimientoEditando {
   fecha_mantenimiento: string;
   tipo_mantenimiento: string;
   tecnico: string;
+  tecnico_id: number | null;
   descripcion: string;
   observaciones: string;
   estado: string;
@@ -29,6 +31,7 @@ export class MantenimientoDetalle {
   @Input() archivosSeleccionados: File[] = [];
   @Input() mantenimientoEditando: Mantenimiento | null = null;
   @Input({ required: true }) datosEditando!: DatosMantenimientoEditando;
+  @Input() tecnicos: UsuarioSesion[] = [];
 
   @Output() actualizarEvidencias = new EventEmitter<number>();
   @Output() seleccionarFotos = new EventEmitter<Event>();

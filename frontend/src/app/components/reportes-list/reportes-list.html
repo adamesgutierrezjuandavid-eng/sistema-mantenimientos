@@ -24,7 +24,12 @@
 
     <div>
       <label>Tecnico</label>
-      <input type="text" name="reporte_tecnico" [(ngModel)]="filtros.tecnico" />
+      <select name="reporte_tecnico" [(ngModel)]="filtros.tecnico">
+        <option value="">Todos</option>
+        <option *ngFor="let tecnico of tecnicos" [value]="tecnico.nombre">
+          {{ tecnico.nombre }}
+        </option>
+      </select>
     </div>
 
     <div>

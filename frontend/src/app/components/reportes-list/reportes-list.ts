@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { DatePipe, NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MantenimientoReporte, PaginationMeta } from '../../services/equipos';
+import { UsuarioSesion } from '../../services/auth';
 
 export interface FiltrosReporte {
   fecha_inicio: string;
@@ -21,6 +22,7 @@ export interface FiltrosReporte {
 export class ReportesList {
   @Input({ required: true }) mantenimientos: MantenimientoReporte[] = [];
   @Input({ required: true }) filtros!: FiltrosReporte;
+  @Input() tecnicos: UsuarioSesion[] = [];
   @Input({ required: true }) paginacion!: PaginationMeta;
 
   @Output() filtrar = new EventEmitter<void>();

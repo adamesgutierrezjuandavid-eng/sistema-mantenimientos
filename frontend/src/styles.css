@@ -1,1 +1,36 @@
 /* You can add global styles to this file, and also import other style files */
+/* Fondo general de la aplicación */
+body {
+    background-color: #020617 !important;
+    margin: 0;
+}
+body {
+    background: #020617 !important; /* Azul medianoche profundo */
+    margin: 0;
+    overflow-x: hidden;
+}
+
+/* Tarjeta de Login con efecto Glassmorphism */
+.login-card {
+    background: rgba(15, 23, 42, 0.65) !important;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 20px !important;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8) !important;
+}
+
+/* Campos de texto modernos */
+.login-form input {
+    background: rgba(30, 41, 59, 0.5) !important;
+    border: 1px solid rgba(51, 65, 85, 1) !important;
+    color: white !important;
+    border-radius: 12px !important;
+}
+
+/* Botón con degradado futurista */
+.login-form button {
+    background: linear-gradient(135deg, #38bdf8 0%, #2563eb 100%) !important;
+    border: none;
+    box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.39) !important;
+}

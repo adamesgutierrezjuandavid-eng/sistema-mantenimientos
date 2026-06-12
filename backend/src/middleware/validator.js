@@ -128,6 +128,12 @@ const validarMantenimiento = async (req, res, next) => {
       errores.push('El tecnico es obligatorio.');
     }
 
+    if (req.method === 'POST' || req.body.tecnico_id !== undefined) {
+      if (!req.body.tecnico_id || isNaN(parseInt(req.body.tecnico_id))) {
+        errores.push('El ID de tecnico es obligatorio y debe ser numerico.');
+      }
+    }
+
     if (!descripcion || String(descripcion).trim() === '') {
       errores.push('La descripcion es obligatoria.');
     }

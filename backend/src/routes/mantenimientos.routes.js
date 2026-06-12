@@ -38,6 +38,15 @@ const upload = multer({
   }
 });
 
+const uploadEvidencias = (req, res, next) => {
+  upload.array('fotos', 5)(req, res, (error) => {
+    if (error) {
+      return next(error);
+    }
+    next();
+  });
+};
+
 router.get('/', async (req, res) => {
   try {
     const {
@@ -106,6 +115,7 @@ router.post('/', validarMantenimiento, async (req, res) => {
       fecha_mantenimiento,
       tipo_mantenimiento,
       tecnico,
+      tecnico_id,
       descripcion,
       observaciones,
       estado,
@@ -118,18 +128,20 @@ router.post('/', validarMantenimiento, async (req, res) => {
         fecha_mantenimiento,
         tipo_mantenimiento,
         tecnico,
+        tecnico_id,
         descripcion,
         observaciones,
         estado,
         proxima_fecha
       )
-      VALUES ($1, $2, $3, $4, $5, $6, COALESCE($7, 'terminado'), $8)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, COALESCE($8, 'terminado'), $9)
       RETURNING *`,
       [
         equipo_id,
         fecha_mantenimiento,
         tipo_mantenimiento,
         tecnico,
+        tecnico_id,
         descripcion,
         observaciones,
         estado,
@@ -175,7 +187,39 @@ router.get('/:id/evidencias', async (req, res) => {
   }
 });
 
-router.post('/:id/evidencias', upload.array('fotos', 5), async (req, res) => {
+router.get('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const resultado = await pool.query(
+      `SELECT m.*, e.nombre AS equipo, e.codigo_barras, e.serial, e.area, e.asignacion
+       FROM mantenimientos m
+       INNER JOIN equipos e ON e.id = m.equipo_id
+       WHERE m.id = $1
+       LIMIT 1`,
+      [id]
+    );
+
+    if (resultado.rows.length === 0) {
+      return res.status(404).json({
+        ok: false,
+        mensaje: 'Mantenimiento no encontrado'
+      });
+    }
+
+    res.json({
+      ok: true,
+      mantenimiento: resultado.rows[0]
+    });
+  } catch (error) {
+    res.status(500).json({
+      ok: false,
+      mensaje: 'Error consultando mantenimiento',
+      ...detalleError(error)
+    });
+  }
+});
+
+router.post('/:id/evidencias', uploadEvidencias, async (req, res) => {
   const archivos = req.files || [];
 
   try {
@@ -295,6 +339,7 @@ router.put('/:id', validarMantenimiento, async (req, res) => {
       fecha_mantenimiento,
       tipo_mantenimiento,
       tecnico,
+      tecnico_id,
       descripcion,
       observaciones,
       estado,
@@ -307,17 +352,19 @@ router.put('/:id', validarMantenimiento, async (req, res) => {
         fecha_mantenimiento = $1,
         tipo_mantenimiento = $2,
         tecnico = $3,
-        descripcion = $4,
-        observaciones = $5,
-        estado = $6,
-        proxima_fecha = $7,
+        tecnico_id = $4,
+        descripcion = $5,
+        observaciones = $6,
+        estado = $7,
+        proxima_fecha = $8,
         updated_at = CURRENT_TIMESTAMP
-       WHERE id = $8
+       WHERE id = $9
        RETURNING *`,
       [
         fecha_mantenimiento,
         tipo_mantenimiento,
         tecnico,
+        tecnico_id,
         descripcion,
         observaciones,
         estado,
@@ -385,6 +432,29 @@ router.delete('/:id', async (req, res) => {
       ...detalleError(error)
     });
   }
+});
+
+router.use((error, _req, res, _next) => {
+  if (error instanceof multer.MulterError) {
+    return res.status(400).json({
+      ok: false,
+      mensaje: error.message,
+      ...(process.env.NODE_ENV !== 'production' ? { error: error.code } : {})
+    });
+  }
+
+  if (error.message === 'Solo se permiten imagenes') {
+    return res.status(400).json({
+      ok: false,
+      mensaje: error.message
+    });
+  }
+
+  res.status(500).json({
+    ok: false,
+    mensaje: 'Error procesando la solicitud de evidencias',
+    ...detalleError(error)
+  });
 });
 
 module.exports = router;

@@ -50,6 +50,14 @@ export class AuthService {
     return usuario ? JSON.parse(usuario) : null;
   }
 
+  obtenerSesion(): Observable<{ ok: boolean; usuario: UsuarioSesion }> {
+    return this.http.get<{ ok: boolean; usuario: UsuarioSesion }>(`${this.authUrl}/me`);
+  }
+
+  obtenerTecnicos(): Observable<{ ok: boolean; usuarios: UsuarioSesion[] }> {
+    return this.http.get<{ ok: boolean; usuarios: UsuarioSesion[] }>(`${this.authUrl}/usuarios`);
+  }
+
   estaAutenticado() {
     return Boolean(this.obtenerToken() && this.obtenerUsuario());
   }

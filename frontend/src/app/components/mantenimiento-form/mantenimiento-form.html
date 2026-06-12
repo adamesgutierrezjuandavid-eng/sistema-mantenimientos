@@ -25,11 +25,18 @@
 
     <div>
       <label>Tecnico *</label>
-      <input
-        type="text"
-        name="tecnico"
-        [(ngModel)]="mantenimiento.tecnico"
-      />
+      <select
+        name="tecnico_id"
+        [(ngModel)]="mantenimiento.tecnico_id"
+      >
+        <option [ngValue]="null" disabled>Seleccione un tecnico</option>
+        <option *ngFor="let tecnico of tecnicos" [ngValue]="tecnico.id">
+          {{ tecnico.nombre }}
+        </option>
+      </select>
+      <p class="hint" *ngIf="tecnicos.length === 0">
+        No hay tecnicos activos registrados.
+      </p>
     </div>
 
     <div>

@@ -1,43 +1,44 @@
+<!-- SECCION DE LOGIN DISEÑO FUTURISTA CON PARTICULAS -->
 <main class="login-page" *ngIf="!usuarioSesion">
-  <app-particles-mct-background></app-particles-mct-background>
-
   <section class="login-card">
-    <div class="brand-mark">SM</div>
-    <span class="eyebrow">Acceso seguro</span>
-    <h1>Sistema de Mantenimientos</h1>
-    <p>Ingrese con su usuario para gestionar equipos, mantenimientos y evidencias.</p>
+    <div class="brand-mark">MCT</div>
+    <span class="eyebrow">Logistica y transporte</span>
+    <h1>MANTENIMIENTO 360º</h1>
 
-    <form class="login-form" (ngSubmit)="iniciarSesion()">
+    <div class="login-form" autocomplete="off">
       <div>
         <label>Usuario</label>
-        <input type="text" name="login_usuario" [(ngModel)]="credenciales.usuario" autocomplete="username" />
+        <input #usuarioInput type="text" name="login_usuario" [(ngModel)]="credenciales.usuario" autocomplete="username" (keyup.enter)="iniciarSesion(usuarioInput.value, passwordInput.value); $event.preventDefault()" />
       </div>
 
       <div>
-        <label>Contrasena</label>
-        <input type="password" name="login_password" [(ngModel)]="credenciales.password" autocomplete="current-password" />
+        <label>Contraseña</label>
+        <input
+          #passwordInput
+          type="password"
+          name="login_password"
+          [(ngModel)]="credenciales.password"
+          autocomplete="current-password"
+          (keyup.enter)="iniciarSesion(usuarioInput.value, passwordInput.value); $event.preventDefault()"
+        />
       </div>
 
-      <button type="submit" [disabled]="cargandoLogin">
+      <button type="button" (click)="iniciarSesion(usuarioInput.value, passwordInput.value)" [disabled]="cargandoLogin">
         {{ cargandoLogin ? 'Ingresando...' : 'Ingresar' }}
       </button>
-    </form>
+    </div>
 
     <p class="message error" *ngIf="mensajeLogin">{{ mensajeLogin }}</p>
     <p class="hint">Usuario inicial: admin / admin123</p>
   </section>
-
-  <div class="login-mct-signature" aria-hidden="true">
-    <span>M</span>
-    <span>C</span>
-    <span>T</span>
-  </div>
 </main>
+
+
 
 <main class="app-shell" *ngIf="usuarioSesion">
   <aside class="sidebar">
     <div class="brand-block">
-      <div class="brand-mark">SM</div>
+      <div class="brand-mark">MCT</div>
       <div>
         <span>Gestion tecnica</span>
         <strong>Mantenimientos</strong>
@@ -69,11 +70,19 @@
         <span>EQ</span>
         Equipos
       </button>
+      <button
+        type="button"
+        [class.active]="vistaActiva === 'tareas'"
+        (click)="vistaActiva = 'tareas'"
+      >
+        <span>TS</span>
+        Tareas
+      </button>
     </nav>
 
     <div class="sidebar-footer">
       <span>Base operativa</span>
-      <strong>Soporte interno</strong>
+      <strong>Soporte Tecnico TI</strong>
     </div>
   </aside>
 
@@ -103,20 +112,61 @@
 
   <ng-container *ngIf="vistaActiva === 'operacion'">
   <section class="panel">
-    <h1>Registro de mantenimientos</h1>
+    <h1>Registro de Mantenimientos</h1>
 
     <div class="search-box">
       <label for="codigo">Codigo de barras o serial</label>
       <div class="search-row">
         <input
           id="codigo"
+          #codigoInput
           type="text"
+          name="codigoBusqueda"
           [(ngModel)]="codigoBusqueda"
-          (keyup.enter)="buscarEquipo()"
           placeholder="Escanee o escriba el codigo"
           autofocus
+          (keyup.enter)="manejarEnterInput(codigoInput.value); $event.preventDefault()"
+          (keydown.ArrowDown)="moverSugerencia(1); $event.preventDefault()"
+          (keydown.ArrowUp)="moverSugerencia(-1); $event.preventDefault()"
+          (input)="onCodigoInput()"
         />
-        <button type="button" (click)="buscarEquipo()">Buscar</button>
+        <button type="button" (click)="buscarEquipo(codigoInput.value)">Buscar</button>
+      </div>
+
+      <div class="search-history" *ngIf="historialBusqueda.length > 0 || sugerenciasBusqueda.length > 0">
+        <div class="search-history-header">
+          <span *ngIf="sugerenciasBusqueda.length > 0">Sugerencias</span>
+          <span *ngIf="sugerenciasBusqueda.length === 0">Ultimas busquedas</span>
+          <button type="button" class="secondary" (click)="limpiarHistorialBusqueda()">
+            Limpiar historial
+          </button>
+        </div>
+        <div class="search-history-list">
+          <button
+            type="button"
+            class="history-chip"
+            *ngFor="let item of (sugerenciasBusqueda.length > 0 ? sugerenciasBusqueda : historialBusqueda); let i = index"
+            [class.active]="sugerenciasBusqueda.length > 0 && i === sugerenciaActiva"
+            (click)="usarBusquedaHistorial(item)"
+          >
+            {{ item }}
+          </button>
+        </div>
+      </div>
+
+      <div class="search-results" *ngIf="resultadosBusqueda.length > 0">
+        <div class="search-results-header">Resultados de búsqueda</div>
+        <div class="search-results-list">
+          <button
+            type="button"
+            class="result-item"
+            *ngFor="let equipo of resultadosBusqueda"
+            (click)="cargarResultadoBusqueda(equipo)"
+          >
+            <strong>{{ equipo.codigo_barras }}</strong> · {{ equipo.nombre }}
+            <div class="result-meta">{{ equipo.marca }} · {{ equipo.empresa }} · {{ equipo.area }}</div>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -175,11 +225,11 @@
     </div>
 
     <div>
-      <label>Modelo</label>
+      <label>Empresa</label>
       <input
         type="text"
-        name="modelo"
-        [(ngModel)]="nuevoEquipo.modelo"
+        name="empresa"
+        [(ngModel)]="nuevoEquipo.empresa"
       />
     </div>
 
@@ -269,8 +319,8 @@
       </div>
 
       <div>
-        <label>Modelo</label>
-        <input type="text" name="edit_modelo" [(ngModel)]="nuevoEquipo.modelo" />
+        <label>Empresa</label>
+        <input type="text" name="edit_empresa" [(ngModel)]="nuevoEquipo.empresa" />
       </div>
 
       <div>
@@ -318,6 +368,7 @@
   *ngIf="equipo && mostrarFormularioMantenimiento"
   [mantenimiento]="nuevoMantenimiento"
   [archivosSeleccionados]="archivosNuevoMantenimiento"
+  [tecnicos]="tecnicos"
   (guardar)="registrarMantenimiento()"
   (seleccionarFotos)="seleccionarFotosNuevoMantenimiento($event)"
 ></app-mantenimiento-form>
@@ -387,6 +438,7 @@
     [archivosSeleccionados]="archivosDetalleMantenimiento"
     [mantenimientoEditando]="mantenimientoEditando"
     [datosEditando]="datosMantenimientoEditando"
+    [tecnicos]="tecnicos"
     (actualizarEvidencias)="cargarEvidencias($event)"
     (seleccionarFotos)="seleccionarFotosDetalle($event)"
     (subirFotos)="subirFotosDetalle()"
@@ -403,12 +455,102 @@
     <app-reportes-list
       [mantenimientos]="reporteMantenimientos"
       [filtros]="filtrosReporte"
+      [tecnicos]="tecnicos"
       [paginacion]="paginacionReporte"
       (filtrar)="listarReporteMantenimientos(1)"
       (limpiar)="limpiarFiltrosReporte()"
       (exportar)="exportarReporteCsv()"
       (cambiarPagina)="listarReporteMantenimientos($event)"
     ></app-reportes-list>
+  </ng-container>
+
+  <ng-container *ngIf="vistaActiva === 'tareas'">
+    <section class="panel">
+      <div class="panel-header">
+        <h2>Tareas de técnicos</h2>
+        <p>Próximos mantenimientos, pendientes y vencidos por técnico.</p>
+      </div>
+
+      <div class="tasks-grid">
+        <div class="task-card" *ngFor="let resumen of resumenTecnicos">
+          <div class="task-card-title">
+            <h3>{{ resumen.tecnico }}</h3>
+            <span class="task-card-badge">{{ resumen.total }} tareas</span>
+          </div>
+          <div class="task-metrics">
+            <div class="task-metric card-proximo">
+              <strong>{{ resumen.proximos }}</strong>
+            </div>
+            <div class="task-metric card-pendiente">
+              <strong>{{ resumen.pendientes }}</strong>
+            </div>
+            <div class="task-metric card-vencido">
+              <strong>{{ resumen.vencidos }}</strong>
+            </div>
+          </div>
+          <button type="button" class="secondary" (click)="verTareasTecnico(resumen.tecnico)">
+            Ver tareas
+          </button>
+          <div class="task-card-footer">
+            <span class="task-card-label">Próximos</span>
+            <span class="task-card-separator"></span>
+            <span class="task-card-label">Pendientes</span>
+            <span class="task-card-separator"></span>
+            <span class="task-card-label">Vencidos</span>
+          </div>
+        </div>
+      </div>
+
+      <section class="panel" *ngIf="tareasTecnicoSeleccionado">
+        <div class="panel-header">
+          <h3>Detalle de tareas para {{ tareasTecnicoSeleccionado }}</h3>
+          <button type="button" class="secondary" (click)="tareasTecnicoSeleccionado = null">
+            Ocultar detalle
+          </button>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Equipo</th>
+              <th>Fecha</th>
+              <th>Tipo</th>
+              <th>Estado</th>
+              <th>Próxima fecha</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let tarea of tareasTecnicoDetalle | slice:(paginaTareasDetalle-1)*tareasPorPagina:paginaTareasDetalle*tareasPorPagina">
+              <td>{{ tarea.equipo }}</td>
+              <td>{{ tarea.fecha_mantenimiento | date:'yyyy-MM-dd' }}</td>
+              <td>{{ tarea.tipo_mantenimiento }}</td>
+              <td>{{ tarea.estado }}</td>
+              <td>{{ tarea.proxima_fecha | date:'yyyy-MM-dd' }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="pagination" *ngIf="tareasTecnicoDetalle.length > tareasPorPagina">
+          <button
+            type="button"
+            class="secondary"
+            [disabled]="paginaTareasDetalle === 1"
+            (click)="cambiarPaginaTareasDetalle(paginaTareasDetalle - 1)"
+          >
+            Anterior
+          </button>
+          <span>Pagina {{ paginaTareasDetalle }} de {{ obtenerTotalPaginasTareas() }}</span>
+          <button
+            type="button"
+            class="secondary"
+            [disabled]="paginaTareasDetalle >= obtenerTotalPaginasTareas()"
+            (click)="cambiarPaginaTareasDetalle(paginaTareasDetalle + 1)"
+          >
+            Siguiente
+          </button>
+        </div>
+      </section>
+    </section>
   </ng-container>
 
   <ng-container *ngIf="vistaActiva === 'equipos'">

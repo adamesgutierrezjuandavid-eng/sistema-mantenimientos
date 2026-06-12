@@ -66,4 +66,26 @@ router.get('/me', autenticar, (req, res) => {
   });
 });
 
+router.get('/usuarios', autenticar, async (req, res) => {
+  try {
+    const resultado = await pool.query(
+      `SELECT id, nombre, usuario, rol
+       FROM usuarios
+       WHERE activo = true AND rol = 'tecnico'
+       ORDER BY nombre ASC`
+    );
+
+    res.json({
+      ok: true,
+      usuarios: resultado.rows
+    });
+  } catch (error) {
+    res.status(500).json({
+      ok: false,
+      mensaje: 'Error consultando tecnicos',
+      ...detalleError(error)
+    });
+  }
+});
+
 module.exports = router;

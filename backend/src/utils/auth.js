@@ -1,7 +1,11 @@
 const crypto = require('crypto');
 
 const TOKEN_TTL_SECONDS = 8 * 60 * 60;
-const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-change-me';
+const JWT_SECRET = process.env.JWT_SECRET;
+
+if (!JWT_SECRET) {
+  throw new Error('JWT_SECRET es obligatorio. Defina JWT_SECRET en el archivo .env.');
+}
 
 function base64Url(input) {
   return Buffer.from(input).toString('base64url');

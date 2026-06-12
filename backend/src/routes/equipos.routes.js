@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
           OR serial ILIKE '%' || $1 || '%'
           OR nombre ILIKE '%' || $1 || '%'
           OR marca ILIKE '%' || $1 || '%'
-          OR modelo ILIKE '%' || $1 || '%'
+          OR empresa ILIKE '%' || $1 || '%'
        )
        AND ($2 = '' OR area ILIKE '%' || $2 || '%')
        AND ($3 = '' OR estado = $3)
@@ -38,7 +38,7 @@ router.get('/', async (req, res) => {
           OR serial ILIKE '%' || $1 || '%'
           OR nombre ILIKE '%' || $1 || '%'
           OR marca ILIKE '%' || $1 || '%'
-          OR modelo ILIKE '%' || $1 || '%'
+          OR empresa ILIKE '%' || $1 || '%'
        )
        AND ($2 = '' OR area ILIKE '%' || $2 || '%')
        AND ($3 = '' OR estado = $3)
@@ -93,6 +93,39 @@ router.get('/buscar/:valor', async (req, res) => {
     });
   }
 });
+
+router.get('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const resultado = await pool.query(
+      `SELECT *
+       FROM equipos
+       WHERE id = $1
+       LIMIT 1`,
+      [id]
+    );
+
+    if (resultado.rows.length === 0) {
+      return res.status(404).json({
+        ok: false,
+        mensaje: 'Equipo no encontrado'
+      });
+    }
+
+    res.json({
+      ok: true,
+      equipo: resultado.rows[0]
+    });
+  } catch (error) {
+    res.status(500).json({
+      ok: false,
+      mensaje: 'Error consultando equipo',
+      ...detalleError(error)
+    });
+  }
+});
+
 router.get('/:id/mantenimientos', async (req, res) => {
   try {
     const { id } = req.params;
@@ -128,7 +161,7 @@ router.post('/', validarEquipo, async (req, res) => {
       serial,
       nombre,
       marca,
-      modelo,
+      empresa,
       ubicacion,
       area,
       asignacion,
@@ -142,7 +175,7 @@ router.post('/', validarEquipo, async (req, res) => {
         serial,
         nombre,
         marca,
-        modelo,
+        empresa,
         ubicacion,
         area,
         asignacion,
@@ -156,7 +189,7 @@ router.post('/', validarEquipo, async (req, res) => {
         serial,
         nombre,
         marca,
-        modelo,
+        empresa,
         ubicacion,
         area,
         asignacion,
@@ -187,7 +220,7 @@ router.put('/:id', validarEquipo, async (req, res) => {
       serial,
       nombre,
       marca,
-      modelo,
+      empresa,
       ubicacion,
       area,
       asignacion,
@@ -202,7 +235,7 @@ router.put('/:id', validarEquipo, async (req, res) => {
         serial = $2,
         nombre = $3,
         marca = $4,
-        modelo = $5,
+        empresa = $5,
         ubicacion = $6,
         area = $7,
         asignacion = $8,
@@ -216,7 +249,7 @@ router.put('/:id', validarEquipo, async (req, res) => {
         serial,
         nombre,
         marca,
-        modelo,
+        empresa,
         ubicacion,
         area,
         asignacion,

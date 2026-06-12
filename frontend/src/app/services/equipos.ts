@@ -9,7 +9,7 @@ export interface Equipo {
   serial: string;
   nombre: string;
   marca: string;
-  modelo: string;
+  empresa: string;
   ubicacion: string;
   area: string;
   asignacion: string | null;
@@ -25,6 +25,7 @@ export interface Mantenimiento {
   fecha_mantenimiento: string;
   tipo_mantenimiento: string;
   tecnico: string;
+  tecnico_id?: number | null;
   descripcion: string;
   observaciones: string;
   estado: string;
@@ -134,6 +135,7 @@ export class Equipos {
     fecha_mantenimiento: string;
     tipo_mantenimiento: string;
     tecnico: string;
+    tecnico_id: number | null;
     descripcion: string;
     observaciones: string;
     estado: string;
@@ -183,6 +185,7 @@ export class Equipos {
       fecha_mantenimiento: string;
       tipo_mantenimiento: string;
       tecnico: string;
+      tecnico_id: number | null;
       descripcion: string;
       observaciones: string;
       estado: string;
@@ -235,7 +238,7 @@ export class Equipos {
     serial: string;
     nombre: string;
     marca: string;
-    modelo: string;
+    empresa: string;
     ubicacion: string;
     area: string;
     asignacion: string;
@@ -255,7 +258,7 @@ export class Equipos {
       serial: string;
       nombre: string;
       marca: string;
-      modelo: string;
+      empresa: string;
       ubicacion: string;
       area: string;
       asignacion: string;
@@ -273,5 +276,9 @@ export class Equipos {
     return this.http.delete<{ ok: boolean; mensaje: string; equipo: Equipo }>(
       `${this.apiUrl}/${equipoId}`
     );
+  }
+
+  obtenerEquipo(equipoId: number): Observable<{ ok: boolean; equipo: Equipo }> {
+    return this.http.get<{ ok: boolean; equipo: Equipo }>(`${this.apiUrl}/${equipoId}`);
   }
 }

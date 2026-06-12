@@ -115,7 +115,15 @@
 
     <div>
       <label>Tecnico *</label>
-      <input type="text" name="edit_mant_tecnico" [(ngModel)]="datosEditando.tecnico" />
+      <select
+        name="edit_mant_tecnico_id"
+        [(ngModel)]="datosEditando.tecnico_id"
+      >
+        <option [ngValue]="null" disabled>Seleccione un tecnico</option>
+        <option *ngFor="let tecnico of tecnicos" [ngValue]="tecnico.id">
+          {{ tecnico.nombre }}
+        </option>
+      </select>
     </div>
 
     <div>

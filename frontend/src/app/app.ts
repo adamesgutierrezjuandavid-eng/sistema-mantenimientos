@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DatePipe, NgFor, NgIf } from '@angular/common';
+import { DatePipe, NgFor, NgIf, SlicePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Equipos, Equipo, EstadoApi, EvidenciaMantenimiento, Mantenimiento, MantenimientoReporte, PaginationMeta, ResumenDashboard } from './services/equipos';
 import { AuthService, UsuarioSesion } from './services/auth';
@@ -10,7 +10,6 @@ import { EquiposList } from './components/equipos-list/equipos-list';
 import { MantenimientoAlerta } from './components/mantenimiento-alerta/mantenimiento-alerta';
 import { MantenimientoDetalle } from './components/mantenimiento-detalle/mantenimiento-detalle';
 import { MantenimientoForm } from './components/mantenimiento-form/mantenimiento-form';
-import { ParticlesMctBackground } from './components/particles-mct-background/particles-mct-background';
 import { ReportesList } from './components/reportes-list/reportes-list';
 
 type AccionConfirmacion = 'eliminar-evidencia' | 'eliminar-mantenimiento' | 'eliminar-equipo';
@@ -23,6 +22,7 @@ type AccionConfirmacion = 'eliminar-evidencia' | 'eliminar-mantenimiento' | 'eli
     NgIf,
     NgFor,
     DatePipe,
+    SlicePipe,
     ConfirmModal,
     Dashboard,
     EquipoFicha,
@@ -30,7 +30,6 @@ type AccionConfirmacion = 'eliminar-evidencia' | 'eliminar-mantenimiento' | 'eli
     MantenimientoAlerta,
     MantenimientoDetalle,
     MantenimientoForm,
-    ParticlesMctBackground,
     ReportesList
   ],
   templateUrl: './app.html',
@@ -50,6 +49,11 @@ export class App implements OnInit {
   archivosNuevoMantenimiento: File[] = [];
   archivosDetalleMantenimiento: File[] = [];
   reporteMantenimientos: MantenimientoReporte[] = [];
+  resumenTecnicos: { tecnico: string; proximos: number; pendientes: number; vencidos: number; total: number }[] = [];
+  tareasTecnicoSeleccionado: string | null = null;
+  tareasTecnicoDetalle: MantenimientoReporte[] = [];
+  paginaTareasDetalle = 1;
+  tareasPorPagina = 5;
   mantenimientoSeleccionado: Mantenimiento | null = null;
   mensaje = '';
   mensajeLogin = '';
@@ -65,7 +69,16 @@ export class App implements OnInit {
     titulo: 'Sin proxima fecha',
     detalle: 'Este equipo no tiene una proxima fecha de mantenimiento registrada.'
   };
+
+  tecnicos: UsuarioSesion[] = [];
   ultimoCodigoNoEncontrado = '';
+  historialBusqueda: string[] = [];
+  sugerenciasBusqueda: string[] = [];
+  sugerenciaActiva = -1;
+  resultadosBusqueda: Equipo[] = [];
+  busquedaRealizada = false;
+  busquedaAutoTimeout: any = null;
+  busquedaAutoDelay = 500;
   resumen: ResumenDashboard = {
     total_equipos: 0,
     total_mantenimientos: 0,
@@ -120,6 +133,7 @@ export class App implements OnInit {
   fecha_mantenimiento: '',
   tipo_mantenimiento: 'preventivo',
   tecnico: '',
+  tecnico_id: null as number | null,
   descripcion: '',
   observaciones: '',
   estado: 'terminado',
@@ -130,6 +144,7 @@ export class App implements OnInit {
   fecha_mantenimiento: '',
   tipo_mantenimiento: 'preventivo',
   tecnico: '',
+  tecnico_id: null as number | null,
   descripcion: '',
   observaciones: '',
   estado: 'terminado',
@@ -140,7 +155,7 @@ export class App implements OnInit {
   serial: '',
   nombre: '',
   marca: '',
-  modelo: '',
+  empresa: '',
   ubicacion: '',
   area: '',
   asignacion: '',
@@ -156,21 +171,39 @@ mostrarFormularioEdicionEquipo = false;
 
   ngOnInit() {
     this.verificarApi();
-    this.usuarioSesion = this.authService.obtenerUsuario();
+    this.historialBusqueda = JSON.parse(localStorage.getItem('mantenimientos_search_history') || '[]');
+    this.actualizarSugerencias();
+    const usuarioAlmacenado = this.authService.obtenerUsuario();
 
-    if (this.usuarioSesion) {
-      this.inicializarDatos();
+    if (!usuarioAlmacenado) {
+      return;
     }
+
+    this.authService.obtenerSesion().subscribe({
+      next: (respuesta) => {
+        this.usuarioSesion = respuesta.usuario;
+        this.inicializarDatos();
+      },
+      error: () => {
+        this.authService.cerrarSesion();
+        this.usuarioSesion = null;
+        this.mensajeLogin = 'Sesion expirada. Inicie sesion de nuevo.';
+      }
+    });
   }
 
   inicializarDatos() {
     this.cargarResumen();
     this.listarEquipos();
     this.listarReporteMantenimientos();
+    this.cargarTecnicos();
   }
 
-  iniciarSesion() {
-    if (!this.credenciales.usuario || !this.credenciales.password) {
+  iniciarSesion(usuario?: string, password?: string) {
+    const usuarioLogin = usuario?.trim() ?? this.credenciales.usuario?.trim();
+    const passwordLogin = password ?? this.credenciales.password;
+
+    if (!usuarioLogin || !passwordLogin) {
       this.mensajeLogin = 'Ingrese usuario y contrasena.';
       return;
     }
@@ -178,7 +211,7 @@ mostrarFormularioEdicionEquipo = false;
     this.cargandoLogin = true;
     this.mensajeLogin = '';
 
-    this.authService.login(this.credenciales.usuario, this.credenciales.password).subscribe({
+    this.authService.login(usuarioLogin, passwordLogin).subscribe({
       next: (respuesta) => {
         this.usuarioSesion = respuesta.usuario;
         this.credenciales = { usuario: '', password: '' };
@@ -201,6 +234,7 @@ mostrarFormularioEdicionEquipo = false;
     this.mantenimientos = [];
     this.reporteMantenimientos = [];
     this.mantenimientoSeleccionado = null;
+    this.tecnicos = [];
     this.mensaje = '';
   }
 
@@ -268,9 +302,81 @@ mostrarFormularioEdicionEquipo = false;
       next: (respuesta: { ok: boolean; mantenimientos: MantenimientoReporte[]; pagination: PaginationMeta }) => {
         this.reporteMantenimientos = respuesta.mantenimientos;
         this.paginacionReporte = respuesta.pagination;
+        this.actualizarResumenTecnicos();
       },
       error: () => {
         this.mensaje = 'No se pudo cargar el reporte de mantenimientos.';
+      }
+    });
+  }
+
+  actualizarResumenTecnicos() {
+    const resumenMap = new Map<string, { tecnico: string; proximos: number; pendientes: number; vencidos: number; total: number }>();
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    const proximosLimite = new Date(hoy);
+    proximosLimite.setDate(hoy.getDate() + 7);
+
+    for (const mantenimiento of this.reporteMantenimientos) {
+      const tecnico = mantenimiento.tecnico || 'Sin tecnico';
+      if (!resumenMap.has(tecnico)) {
+        resumenMap.set(tecnico, { tecnico, proximos: 0, pendientes: 0, vencidos: 0, total: 0 });
+      }
+
+      const resumen = resumenMap.get(tecnico)!;
+      resumen.total += 1;
+
+      const proximaFecha = mantenimiento.proxima_fecha ? new Date(mantenimiento.proxima_fecha) : null;
+      const estado = mantenimiento.estado?.toLowerCase() || '';
+
+      if (estado === 'pendiente' || estado === 'en proceso') {
+        resumen.pendientes += 1;
+      }
+
+      if (proximaFecha) {
+        proximaFecha.setHours(0, 0, 0, 0);
+        if (proximaFecha < hoy) {
+          resumen.vencidos += 1;
+        } else if (proximaFecha <= proximosLimite) {
+          resumen.proximos += 1;
+        }
+      }
+    }
+
+    this.resumenTecnicos = Array.from(resumenMap.values()).sort((a, b) => b.total - a.total);
+    if (this.tareasTecnicoSeleccionado) {
+      this.verTareasTecnico(this.tareasTecnicoSeleccionado);
+    }
+  }
+
+  verTareasTecnico(tecnico: string) {
+    this.tareasTecnicoSeleccionado = tecnico;
+    this.paginaTareasDetalle = 1;
+    this.tareasTecnicoDetalle = this.reporteMantenimientos
+      .filter((m) => (m.tecnico || 'Sin tecnico') === tecnico)
+      .sort((a, b) => {
+        const fechaA = a.proxima_fecha ? new Date(a.proxima_fecha).getTime() : 0;
+        const fechaB = b.proxima_fecha ? new Date(b.proxima_fecha).getTime() : 0;
+        return fechaA - fechaB;
+      });
+  }
+
+  cambiarPaginaTareasDetalle(page: number) {
+    this.paginaTareasDetalle = page;
+  }
+
+  obtenerTotalPaginasTareas(): number {
+    return Math.max(1, Math.ceil(this.tareasTecnicoDetalle.length / this.tareasPorPagina));
+  }
+
+  cargarTecnicos() {
+    this.authService.obtenerTecnicos().subscribe({
+      next: (respuesta) => {
+        this.tecnicos = respuesta.usuarios || [];
+      },
+      error: () => {
+        this.tecnicos = [];
+        this.mensaje = 'No se pudo cargar la lista de tecnicos.';
       }
     });
   }
@@ -298,35 +404,57 @@ mostrarFormularioEdicionEquipo = false;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  buscarEquipo() {
-    const valor = this.codigoBusqueda.trim();
-
-    if (!valor) {
+  buscarEquipo(valor?: string) {
+    const texto = ((valor ?? this.codigoBusqueda) || '').trim();
+    if (!texto) {
       this.mensaje = 'Ingrese o escanee un codigo de barras o serial.';
       return;
     }
 
+    this.codigoBusqueda = texto;
+    this.actualizarSugerencias();
     this.cargando = true;
     this.mensaje = '';
     this.ultimoCodigoNoEncontrado = '';
     this.equipo = null;
     this.mantenimientos = [];
     this.mantenimientoSeleccionado = null;
+    this.resultadosBusqueda = [];
+    this.busquedaRealizada = true;
 
-    this.equiposService.buscarEquipo(valor).subscribe({
-  next: (respuesta: { ok: boolean; equipo: Equipo }) => {
-    this.equipo = respuesta.equipo;
+    this.equiposService
+      .listarEquipos({ texto, area: '', estado: '', asignacion: '', page: 1, limit: 5 })
+      .subscribe({
+        next: (respuesta) => {
+          const equipos = respuesta.equipos || [];
+          if (equipos.length === 1) {
+            this.cargarResultadoBusqueda(equipos[0]);
+          } else if (equipos.length > 1) {
+            this.resultadosBusqueda = equipos;
+            this.cargando = false;
+          } else {
+            this.mensaje = 'Equipo no encontrado.';
+            this.ultimoCodigoNoEncontrado = texto;
+            this.cargando = false;
+          }
+        },
+        error: () => {
+          this.mensaje = 'Error al buscar equipos.';
+          this.ultimoCodigoNoEncontrado = texto;
+          this.cargando = false;
+        }
+      });
+  }
+
+  cargarResultadoBusqueda(equipo: Equipo) {
+    this.registrarBusquedaHistorial(this.codigoBusqueda);
+    this.resultadosBusqueda = [];
+    this.mensaje = '';
+    this.equipo = equipo;
     this.mostrarFormularioMantenimiento = false;
     this.mostrarFormularioEdicionEquipo = false;
-    this.cargarMantenimientos(respuesta.equipo.id);
+    this.cargarMantenimientos(equipo.id);
     this.cargando = false;
-  },
-  error: () => {
-    this.mensaje = 'Equipo no encontrado.';
-    this.ultimoCodigoNoEncontrado = valor;
-    this.cargando = false;
-  }
-});
   }
 
   prepararRegistroEquipo() {
@@ -335,6 +463,91 @@ mostrarFormularioEdicionEquipo = false;
     this.nuevoEquipo.serial = '';
     this.nuevoEquipo.nombre = '';
     this.mensaje = 'Complete los datos del equipo para registrarlo.';
+  }
+
+  registrarBusquedaHistorial(codigo: string) {
+    const valor = codigo.trim();
+    if (!valor) {
+      return;
+    }
+
+    this.historialBusqueda = [valor, ...this.historialBusqueda.filter((item) => item !== valor)].slice(0, 5);
+    localStorage.setItem('mantenimientos_search_history', JSON.stringify(this.historialBusqueda));
+    this.actualizarSugerencias();
+  }
+
+  usarBusquedaHistorial(codigo: string) {
+    this.codigoBusqueda = codigo;
+    this.sugerenciaActiva = -1;
+    this.cancelarBusquedaAutomatica();
+    this.actualizarSugerencias();
+    this.buscarEquipo(codigo);
+  }
+
+  manejarEnterInput(valor?: string) {
+    this.cancelarBusquedaAutomatica();
+
+    if (this.sugerenciasBusqueda.length > 0 && this.sugerenciaActiva >= 0) {
+      this.usarBusquedaHistorial(this.sugerenciasBusqueda[this.sugerenciaActiva]);
+      return;
+    }
+
+    this.buscarEquipo(valor);
+  }
+
+  moverSugerencia(direccion: number) {
+    if (!this.sugerenciasBusqueda.length) {
+      return;
+    }
+
+    const cantidad = this.sugerenciasBusqueda.length;
+    this.sugerenciaActiva = (this.sugerenciaActiva + direccion + cantidad) % cantidad;
+    this.codigoBusqueda = this.sugerenciasBusqueda[this.sugerenciaActiva];
+  }
+
+  onCodigoInput() {
+    this.resultadosBusqueda = [];
+    this.busquedaRealizada = false;
+    this.actualizarSugerencias();
+    this.programarBusquedaAutomatica();
+  }
+
+  programarBusquedaAutomatica() {
+    this.cancelarBusquedaAutomatica();
+
+    const texto = this.codigoBusqueda.trim();
+    if (!texto) {
+      return;
+    }
+
+    this.busquedaAutoTimeout = setTimeout(() => {
+      if (this.sugerenciaActiva < 0) {
+        this.buscarEquipo(this.codigoBusqueda);
+      }
+    }, this.busquedaAutoDelay);
+  }
+
+  cancelarBusquedaAutomatica() {
+    if (this.busquedaAutoTimeout) {
+      clearTimeout(this.busquedaAutoTimeout);
+      this.busquedaAutoTimeout = null;
+    }
+  }
+
+  limpiarHistorialBusqueda() {
+    this.historialBusqueda = [];
+    this.sugerenciasBusqueda = [];
+    this.sugerenciaActiva = -1;
+    this.cancelarBusquedaAutomatica();
+    localStorage.removeItem('mantenimientos_search_history');
+  }
+
+  actualizarSugerencias() {
+    const texto = this.codigoBusqueda.trim().toLowerCase();
+    this.sugerenciasBusqueda = texto
+      ? this.historialBusqueda.filter((item) => item.toLowerCase().includes(texto)).slice(0, 5)
+      : [];
+    this.sugerenciaActiva = -1;
   }
 
   cargarMantenimientos(equipoId: number) {
@@ -584,6 +797,7 @@ editarMantenimiento(mantenimiento: Mantenimiento) {
       : '',
     tipo_mantenimiento: mantenimiento.tipo_mantenimiento,
     tecnico: mantenimiento.tecnico,
+    tecnico_id: mantenimiento.tecnico_id ?? null,
     descripcion: mantenimiento.descripcion,
     observaciones: mantenimiento.observaciones || '',
     estado: mantenimiento.estado,
@@ -603,7 +817,7 @@ actualizarMantenimiento() {
   if (
     !this.datosMantenimientoEditando.fecha_mantenimiento ||
     !this.datosMantenimientoEditando.tipo_mantenimiento ||
-    !this.datosMantenimientoEditando.tecnico ||
+    !this.datosMantenimientoEditando.tecnico_id ||
     !this.datosMantenimientoEditando.descripcion
   ) {
     this.mensaje = 'Complete los campos obligatorios del mantenimiento.';
@@ -689,7 +903,7 @@ calcularAlertaMantenimiento() {
       serial: this.equipo.serial,
       nombre: this.equipo.nombre,
       marca: this.equipo.marca || '',
-      modelo: this.equipo.modelo || '',
+      empresa: this.equipo.empresa || '',
       ubicacion: this.equipo.ubicacion || '',
       area: this.equipo.area || '',
       asignacion: this.equipo.asignacion || '',
@@ -841,16 +1055,26 @@ registrarMantenimiento() {
   if (
     !this.nuevoMantenimiento.fecha_mantenimiento ||
     !this.nuevoMantenimiento.tipo_mantenimiento ||
-    !this.nuevoMantenimiento.tecnico ||
+    !this.nuevoMantenimiento.tecnico_id ||
     !this.nuevoMantenimiento.descripcion
   ) {
     this.mensaje = 'Complete los campos obligatorios del mantenimiento.';
     return;
   }
 
+  const tecnicoSeleccionado = this.tecnicos.find(
+    (t) => t.id === this.nuevoMantenimiento.tecnico_id
+  );
+
   const datos = {
     equipo_id: this.equipo.id,
-    ...this.nuevoMantenimiento,
+    fecha_mantenimiento: this.nuevoMantenimiento.fecha_mantenimiento,
+    tipo_mantenimiento: this.nuevoMantenimiento.tipo_mantenimiento,
+    tecnico: tecnicoSeleccionado ? tecnicoSeleccionado.nombre : this.nuevoMantenimiento.tecnico,
+    tecnico_id: this.nuevoMantenimiento.tecnico_id,
+    descripcion: this.nuevoMantenimiento.descripcion,
+    observaciones: this.nuevoMantenimiento.observaciones,
+    estado: this.nuevoMantenimiento.estado,
     proxima_fecha: this.nuevoMantenimiento.proxima_fecha || null
   };
 
@@ -863,6 +1087,7 @@ registrarMantenimiento() {
         fecha_mantenimiento: '',
         tipo_mantenimiento: 'preventivo',
         tecnico: '',
+        tecnico_id: null,
         descripcion: '',
         observaciones: '',
         estado: 'terminado',
@@ -929,7 +1154,7 @@ registrarEquipo() {
         serial: '',
         nombre: '',
         marca: '',
-        modelo: '',
+        empresa: '',
         ubicacion: '',
         area: '',
         asignacion: '',
