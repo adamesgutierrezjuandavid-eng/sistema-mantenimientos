@@ -1,0 +1,57 @@
+<section class="panel">
+  <div class="section-header">
+    <h2>Historial de mantenimientos</h2>
+    <button
+      type="button"
+      class="secondary"
+      *ngIf="mantenimientos.length > 0"
+      (click)="exportar.emit()"
+    >
+      Exportar historial
+    </button>
+  </div>
+
+  <div class="table-wrap" *ngIf="mantenimientos.length > 0">
+    <table>
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Tipo</th>
+          <th>Tecnico</th>
+          <th>Estado</th>
+          <th>Evidencias</th>
+          <th>Proxima fecha</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let mantenimiento of mantenimientos">
+          <td>{{ mantenimiento.fecha_mantenimiento | date:'yyyy-MM-dd' }}</td>
+          <td>{{ mantenimiento.tipo_mantenimiento }}</td>
+          <td>{{ mantenimiento.tecnico }}</td>
+          <td>
+            <span
+              class="maintenance-status"
+              [class.pending]="mantenimiento.estado === 'pendiente'"
+              [class.process]="mantenimiento.estado === 'en proceso'"
+              [class.done]="mantenimiento.estado === 'terminado'"
+            >
+              {{ mantenimiento.estado }}
+            </span>
+          </td>
+          <td>{{ mantenimiento.evidencias_count || 0 }}</td>
+          <td>{{ mantenimiento.proxima_fecha | date:'yyyy-MM-dd' }}</td>
+          <td>
+            <button type="button" class="secondary" (click)="verDetalle.emit(mantenimiento)">
+              Ver detalle
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="message" *ngIf="mantenimientos.length === 0">
+    Este equipo aun no tiene mantenimientos registrados.
+  </p>
+</section>

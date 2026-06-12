@@ -12,6 +12,7 @@ import { EquiposList } from './components/equipos-list/equipos-list';
 import { MantenimientoAlerta } from './components/mantenimiento-alerta/mantenimiento-alerta';
 import { MantenimientoDetalle } from './components/mantenimiento-detalle/mantenimiento-detalle';
 import { MantenimientoForm } from './components/mantenimiento-form/mantenimiento-form';
+import { MantenimientoHistorial } from './components/mantenimiento-historial/mantenimiento-historial';
 import { ReportesList } from './components/reportes-list/reportes-list';
 
 type AccionConfirmacion = 'eliminar-evidencia' | 'eliminar-mantenimiento' | 'eliminar-equipo';
@@ -34,6 +35,7 @@ type AccionConfirmacion = 'eliminar-evidencia' | 'eliminar-mantenimiento' | 'eli
     MantenimientoAlerta,
     MantenimientoDetalle,
     MantenimientoForm,
+    MantenimientoHistorial,
     ReportesList
   ],
   templateUrl: './app.html',
