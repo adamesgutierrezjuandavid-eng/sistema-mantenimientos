@@ -1,36 +1,56 @@
-/* You can add global styles to this file, and also import other style files */
-/* Fondo general de la aplicación */
+:root {
+  --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --color-bg: #020617;
+  --color-sidebar: #071126;
+  --color-surface: #0f172a;
+  --color-surface-soft: #111c32;
+  --color-hover: #1e293b;
+  --color-border: #334155;
+  --color-text: #e2e8f0;
+  --color-muted: #94a3b8;
+  --color-info: #3b82f6;
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --shadow-card: 0 18px 50px rgba(0, 0, 0, 0.28);
+  --shadow-focus: 0 0 0 3px rgba(59, 130, 246, 0.22);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 body {
-    background-color: #020617 !important;
-    margin: 0;
-}
-body {
-    background: #020617 !important; /* Azul medianoche profundo */
-    margin: 0;
-    overflow-x: hidden;
-}
-
-/* Tarjeta de Login con efecto Glassmorphism */
-.login-card {
-    background: rgba(15, 23, 42, 0.65) !important;
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    border-radius: 20px !important;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8) !important;
+  background:
+    radial-gradient(circle at top left, rgba(59, 130, 246, 0.14), transparent 28%),
+    linear-gradient(180deg, #020617 0%, #071126 100%);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  margin: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
-/* Campos de texto modernos */
-.login-form input {
-    background: rgba(30, 41, 59, 0.5) !important;
-    border: 1px solid rgba(51, 65, 85, 1) !important;
-    color: white !important;
-    border-radius: 12px !important;
+button,
+input,
+select,
+textarea {
+  font: inherit;
 }
 
-/* Botón con degradado futurista */
-.login-form button {
-    background: linear-gradient(135deg, #38bdf8 0%, #2563eb 100%) !important;
-    border: none;
-    box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.39) !important;
+::selection {
+  background: rgba(59, 130, 246, 0.38);
+  color: #ffffff;
 }

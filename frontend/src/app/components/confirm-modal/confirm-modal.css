@@ -1,6 +1,7 @@
 .modal-backdrop {
   align-items: center;
-  background: rgba(15, 23, 42, 0.54);
+  background: rgba(2, 6, 23, 0.72);
+  backdrop-filter: blur(8px);
   display: flex;
   inset: 0;
   justify-content: center;
@@ -10,22 +11,22 @@
 }
 
 .confirm-modal {
-  background: #ffffff;
-  border: 1px solid #d9e2ec;
-  border-radius: 8px;
-  box-shadow: 0 24px 80px rgba(15, 23, 42, 0.28);
+  background: rgba(15, 23, 42, 0.98);
+  border: 1px solid rgba(51, 65, 85, 0.95);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 28px 90px rgba(0, 0, 0, 0.46);
   max-width: 440px;
   padding: 24px;
   width: 100%;
 }
 
 .confirm-modal h2 {
-  color: #102a43;
+  color: var(--color-text);
   margin: 0 0 10px;
 }
 
 .confirm-modal p {
-  color: #52606d;
+  color: var(--color-muted);
   font-weight: 600;
   line-height: 1.5;
   margin: 0 0 20px;
@@ -39,20 +40,21 @@
 }
 
 button {
-  background: #2563eb;
-  border: none;
-  border-radius: 6px;
-  color: white;
+  background: var(--color-info);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  color: #ffffff;
   cursor: pointer;
   font-weight: 800;
-  padding: 10px 16px;
+  padding: 10px 14px;
 }
 
 button.secondary {
-  background: #e2e8f0;
-  color: #102a43;
+  background: rgba(15, 23, 42, 0.9);
+  border-color: rgba(51, 65, 85, 0.95);
+  color: var(--color-text);
 }
 
 button.danger-button {
-  background: #dc2626;
+  background: var(--color-danger);
 }
