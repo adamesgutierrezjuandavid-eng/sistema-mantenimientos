@@ -40,8 +40,8 @@
     <div class="brand-block">
       <div class="brand-mark">MCT</div>
       <div>
-        <span>Gestion tecnica</span>
-        <strong>Mantenimientos</strong>
+        <span>Sistema Mantenimiento 360</span>
+        <strong>Gestion Tecnica</strong>
       </div>
     </div>
 
@@ -51,58 +51,76 @@
         [class.active]="vistaActiva === 'operacion'"
         (click)="vistaActiva = 'operacion'"
       >
-        <span>OP</span>
-        Operacion
+        <span class="nav-icon">OP</span>
+        <span class="nav-text">
+          <strong>Operacion</strong>
+          <small>Registro y consulta</small>
+        </span>
       </button>
       <button
         type="button"
         [class.active]="vistaActiva === 'reportes'"
         (click)="vistaActiva = 'reportes'"
       >
-        <span>RP</span>
-        Reportes
+        <span class="nav-icon">RP</span>
+        <span class="nav-text">
+          <strong>Reportes</strong>
+          <small>Analisis y exportacion</small>
+        </span>
       </button>
       <button
         type="button"
         [class.active]="vistaActiva === 'equipos'"
         (click)="vistaActiva = 'equipos'"
       >
-        <span>EQ</span>
-        Equipos
+        <span class="nav-icon">EQ</span>
+        <span class="nav-text">
+          <strong>Equipos</strong>
+          <small>Inventario tecnico</small>
+        </span>
       </button>
       <button
         type="button"
         [class.active]="vistaActiva === 'tareas'"
         (click)="vistaActiva = 'tareas'"
       >
-        <span>TS</span>
-        Tareas
+        <span class="nav-icon">TS</span>
+        <span class="nav-text">
+          <strong>Tareas</strong>
+          <small>Seguimiento operativo</small>
+        </span>
       </button>
     </nav>
 
     <div class="sidebar-footer">
-      <span>Base operativa</span>
+      <span>Unidad responsable</span>
       <strong>Soporte Tecnico TI</strong>
+      <small>Activos, evidencias y mantenimientos</small>
     </div>
   </aside>
 
   <section class="workspace">
     <header class="app-header">
-      <div>
+      <div class="header-title">
         <span class="eyebrow">Sistema interno</span>
         <h1>Sistema de Mantenimientos</h1>
         <p>Control de equipos por codigo de barras, historial y alertas operativas.</p>
       </div>
 
-      <div class="api-status" [class.offline]="!apiConectada">
-        <span></span>
-        {{ estadoApi }}
-      </div>
+      <div class="header-actions">
+        <div class="api-status" [class.offline]="!apiConectada">
+          <span></span>
+          {{ estadoApi }}
+        </div>
 
-      <div class="session-box">
-        <span>{{ usuarioSesion.nombre }}</span>
-        <strong>{{ usuarioSesion.rol }}</strong>
-        <button type="button" class="secondary" (click)="cerrarSesion()">Salir</button>
+        <div class="session-box">
+          <div class="session-avatar">{{ usuarioSesion.nombre.charAt(0) }}</div>
+          <div>
+            <span>{{ usuarioSesion.nombre }}</span>
+            <strong>{{ usuarioSesion.rol }}</strong>
+          </div>
+          <button type="button" class="secondary" (click)="cerrarSesion()">Salir</button>
+        </div>
       </div>
     </header>
 
