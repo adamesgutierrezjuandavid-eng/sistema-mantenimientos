@@ -7,6 +7,7 @@ import { ConfirmModal } from './components/confirm-modal/confirm-modal';
 import { Dashboard } from './components/dashboard/dashboard';
 import { EquipoFicha } from './components/equipo-ficha/equipo-ficha';
 import { EquipoForm } from './components/equipo-form/equipo-form';
+import { EquipoSearch } from './components/equipo-search/equipo-search';
 import { EquiposList } from './components/equipos-list/equipos-list';
 import { MantenimientoAlerta } from './components/mantenimiento-alerta/mantenimiento-alerta';
 import { MantenimientoDetalle } from './components/mantenimiento-detalle/mantenimiento-detalle';
@@ -28,6 +29,7 @@ type AccionConfirmacion = 'eliminar-evidencia' | 'eliminar-mantenimiento' | 'eli
     Dashboard,
     EquipoFicha,
     EquipoForm,
+    EquipoSearch,
     EquiposList,
     MantenimientoAlerta,
     MantenimientoDetalle,
